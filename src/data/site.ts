@@ -112,13 +112,27 @@ export const hero = {
 	 * než „5 000". A hodnota s rokem („od 2006") je ověřitelná, tedy bezpečná.
 	 */
 	cisla: [
-		{ hodnota: '950', dopocitat: 950, popis: 'Kč / 4 kola' },
 		{ hodnota: '2006', dopocitat: 2006, popis: 'v provozu od' },
 		{ hodnota: '24/7', dopocitat: null, popis: 'odtah nonstop' },
-		{ hodnota: '9', dopocitat: 9, popis: 'oborů pod jednou střechou' },
-		{ hodnota: '[?]', dopocitat: null, popis: 'opravených vozů' },
-		{ hodnota: '[?]', dopocitat: null, popis: 'zákazníků' },
 	],
+
+	/**
+	 * Hodnocení zákazníků.
+	 *
+	 * `pocet` a `url` zatím chybí — doplň je. Známka bez počtu hodnocení je
+	 * slabší tvrzení (4,8 ze čtyř recenzí a ze čtyř set je propastný rozdíl)
+	 * a odkaz na profil dělá z tvrzení ověřitelnou věc.
+	 *
+	 * Ověřeno 19. 9. 2026: Firmy.cz uvádí 5,0 z 6 hodnocení. Google se ověřit
+	 * nepodařilo — hodnota níže je podle toho, co je vidět v Mapách.
+	 */
+	hodnoceni: {
+		znamka: '4,8',
+		maximum: 5,
+		pocet: null as number | null,
+		zdroj: 'Google',
+		url: null as string | null,
+	},
 };
 
 export const rezervacePanel = {

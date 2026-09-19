@@ -77,16 +77,44 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 
 			<dl class="hero__cisla" data-rvc>
 				{
-					hero.cisla.map((c) => {
-						const nevyplneno = c.hodnota.startsWith('[');
-						return (
-							<div class:list={[nevyplneno && 'is-nevyplneno']}>
-								<dd data-count={c.dopocitat ?? undefined}>{c.hodnota}</dd>
-								<dt>{c.popis}</dt>
-							</div>
-						);
-					})
+					hero.cisla.map((c) => (
+						<div>
+							<dd data-count={c.dopocitat ?? undefined}>{c.hodnota}</dd>
+							<dt>{c.popis}</dt>
+						</div>
+					))
 				}
+
+				<div class="hero__hodnoceni">
+					<dd>
+						<span class="hero__hvezdy" aria-hidden="true">
+							{
+								[0, 1, 2, 3, 4].map(() => (
+									<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+										<path d="M12 2.4l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.2l6.5-.9z" />
+									</svg>
+								))
+							}
+						</span>
+						{hero.hodnoceni.znamka}
+						<span class="hero__z-peti">/ {hero.hodnoceni.maximum}</span>
+					</dd>
+					<dt>
+						{
+							hero.hodnoceni.url ? (
+								<a href={hero.hodnoceni.url} target="_blank" rel="noopener">
+									hodnocení na {hero.hodnoceni.zdroj}
+									{hero.hodnoceni.pocet && ` · ${hero.hodnoceni.pocet}×`}
+								</a>
+							) : (
+								<>
+									hodnocení na {hero.hodnoceni.zdroj}
+									{hero.hodnoceni.pocet && ` · ${hero.hodnoceni.pocet}×`}
+								</>
+							)
+						}
+					</dt>
+				</div>
 			</dl>
 		</div>
 
@@ -365,13 +393,35 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 		padding-left: 0;
 	}
 
-	/* nevyplněné číslo — ať je vidět, že se má doplnit, a nevypadá jako fakt */
-	.hero__cisla > .is-nevyplneno dd {
-		color: rgba(239, 233, 223, 0.35);
+	/* ---- hodnocení ---- */
+
+	.hero__hodnoceni dd {
+		display: flex;
+		align-items: baseline;
+		gap: 8px;
 	}
 
-	.hero__cisla > .is-nevyplneno dt {
-		color: rgba(239, 233, 223, 0.3);
+	.hero__hvezdy {
+		display: inline-flex;
+		gap: 1px;
+		color: var(--acc);
+		transform: translateY(-4px);
+	}
+
+	.hero__z-peti {
+		font-size: 20px;
+		color: var(--hero-dim);
+	}
+
+	.hero__hodnoceni dt a {
+		color: var(--hero-dim);
+		text-decoration: none;
+		border-bottom: 1px solid rgba(239, 233, 223, 0.25);
+	}
+
+	.hero__hodnoceni dt a:hover {
+		color: var(--hero-ink);
+		border-bottom-color: var(--acc);
 	}
 
 	.hero__cisla dd {
