@@ -35,6 +35,28 @@ export const rezervace = {
 	urlSNavratem(zpet: string) {
 		return `${this.url}?backUrl=${encodeURIComponent(zpet)}`;
 	},
+
+	/**
+	 * Nativní vložení komponenty místo iframu — kalendář pak běží v našem
+	 * layoutu a dá se obarvit přes CSS proměnné (viz Rezervace.astro).
+	 *
+	 * ⚠️ Názvy souborů obsahují content hash, který se PneuB2B při každém
+	 * nasazení změní. Když se bundle nenačte, stránka se sama přepne zpátky
+	 * na iframe — objednávka tedy nikdy nepřestane fungovat, jen zešedne.
+	 *
+	 * Až od PneuB2B (Pavel Hvozdovič, +420 734 682 144) získáme stabilní URL
+	 * bez hashe, dosadí se sem a tenhle problém zmizí.
+	 * Ověřeno 18. 9. 2026.
+	 */
+	komponenta: {
+		puvod: 'https://hanacekauto.rezervaceservisu.cz',
+		styly: 'styles.3027c286ed4a9b2178e0.css',
+		polyfills: 'polyfills.524ca8a87bda0d6465ec.js',
+		hlavni: 'main.fbf8e41777d885519a02.js',
+		apiUrl: 'https://hanacekauto.smartservis.cloud/api',
+		logoUrl: 'https://hanacekauto.smartservis.cloud/images/logo.png',
+		userGuid: 'DA5888B1-55DE-4D3C-96BC-8B82A6E8A6B4',
+	},
 };
 
 /**

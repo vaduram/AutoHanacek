@@ -1,17 +1,22 @@
 ---
 /**
- * Skutečný rezervační kalendář SmartServis (PneuB2B).
+ * Rezervační kalendář SmartServis (PneuB2B).
  *
- * Zatím iframe — funguje spolehlivě a nerozbije se, až PneuB2B nasadí novou verzi.
- * Jejich API má `Access-Control-Allow-Origin: *`, takže jde i nativní vložení
- * web-componenty <smartservis-reservation-full>; k tomu ale potřebujeme od nich
- * stabilní URL JS bundlu (dnes má v názvu content hash, který se při každém jejich
- * nasazení mění). Postup a atributy komponenty jsou v README.
+ * Primárně vkládáme jejich web-componentu nativně, aby kalendář běžel v našem
+ * layoutu a šel obarvit. Jejich API vrací `Access-Control-Allow-Origin: *`,
+ * takže z cizí domény funguje, a bundle je soběstačný (žádné lazy chunky).
+ *
+ * Pojistka: názvy souborů nesou content hash, který se při jejich nasazení mění.
+ * Když se komponenta do 6 s nezaregistruje, přepneme na iframe. Nejhorší možný
+ * stav je tedy cizí vzhled, nikdy ne nefunkční objednávka.
  */
+import { verejne } from '../lib/cesta';
 import { firma, rezervace } from '../data/site';
 
-const zpet = new URL('/#rezervace', Astro.site ?? 'https://www.hanacekauto.cz').href;
-const src = rezervace.urlSNavratem(zpet);
+const k = rezervace.komponenta;
+// Musí projít přes base, jinak by na github.io chyběl /AutoHanacek.
+const zpet = new URL(verejne('#rezervace'), Astro.site ?? 'https://www.hanacekauto.cz').href;
+const iframeSrc = rezervace.urlSNavratem(zpet);
 ---
 
 <section class="section rez" id="rezervace">
@@ -21,12 +26,29 @@ const src = rezervace.urlSNavratem(zpet);
 			<span class="label">Kalendář ukazuje skutečně volná stání</span>
 		</div>
 
-		<div class="rez__ramec">
-			<iframe
-				src={src}
-				title="Online rezervace pneuservisu — Hanáček Auto"
-				loading="lazy"
-				referrerpolicy="no-referrer-when-downgrade"></iframe>
+		<div class="rez__ramec" data-rez data-origin={k.puvod} data-styly={k.styly} data-polyfills={k.polyfills} data-hlavni={k.hlavni}>
+			<!-- nativní komponenta -->
+			<div class="rez__widget" data-rez-widget>
+				<smartservis-reservation-full
+					api-url={k.apiUrl}
+					logo-url={k.logoUrl}
+					user-guid={k.userGuid}
+					back-url={zpet}></smartservis-reservation-full>
+			</div>
+
+			<div class="rez__nacitani" data-rez-nacitani>
+				<span class="rez__spinner" aria-hidden="true"></span>
+				<span>Načítám kalendář…</span>
+			</div>
+
+			<!-- pojistka, aktivuje se jen když se komponenta nenačte -->
+			<div class="rez__zaloha" data-rez-zaloha hidden>
+				<iframe
+					title="Online rezervace pneuservisu — Hanáček Auto"
+					loading="lazy"
+					referrerpolicy="no-referrer-when-downgrade"
+					data-src={iframeSrc}></iframe>
+			</div>
 		</div>
 
 		<p class="rez__pod">
@@ -39,11 +61,58 @@ const src = rezervace.urlSNavratem(zpet);
 
 <style>
 	.rez__ramec {
+		position: relative;
 		border: 1px solid var(--line);
 		background: var(--srf);
+		min-height: 620px;
 	}
 
-	.rez__ramec iframe {
+	.rez__widget {
+		display: none;
+	}
+
+	.rez__ramec[data-stav='hotovo'] .rez__widget {
+		display: block;
+	}
+
+	/* ---- načítání ---- */
+
+	.rez__nacitani {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		min-height: 620px;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--mut);
+	}
+
+	.rez__ramec[data-stav='hotovo'] .rez__nacitani,
+	.rez__ramec[data-stav='zaloha'] .rez__nacitani {
+		display: none;
+	}
+
+	.rez__spinner {
+		width: 16px;
+		height: 16px;
+		border: 2px solid var(--line);
+		border-top-color: var(--acc);
+		border-radius: 50%;
+		animation: rezSpin 0.8s linear infinite;
+	}
+
+	@keyframes rezSpin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	/* ---- záloha (iframe) ---- */
+
+	.rez__zaloha iframe {
 		display: block;
 		width: 100%;
 		height: clamp(820px, 92vh, 1180px);
@@ -58,8 +127,123 @@ const src = rezervace.urlSNavratem(zpet);
 	}
 
 	@media (max-width: 620px) {
-		.rez__ramec iframe {
+		.rez__zaloha iframe {
 			height: 1100px;
 		}
+
+		.rez__ramec,
+		.rez__nacitani {
+			min-height: 520px;
+		}
+	}
+
+	/* =====================================================================
+	   OBARVENÍ CIZÍ KOMPONENTY
+	   CSS proměnné procházejí i skrz Shadow DOM, takže se dovnitř propíšou.
+	   Jejich vlastní: --primaryColor, --primaryTextColor, --primaryHoverColor
+	   Zbytek je FullCalendar (--fc-*), který uvnitř používají.
+
+	   Kdyby to dopadlo hůř než čistá bílá, stačí smazat celý tenhle blok —
+	   komponenta se vrátí ke svému původnímu vzhledu a nic jiného se nestane.
+	   ===================================================================== */
+
+	.rez__widget {
+		--primaryColor: var(--acc);
+		--primaryTextColor: var(--accink);
+		--primaryHoverColor: #3fa0ef;
+
+		--fc-page-bg-color: var(--bg);
+		--fc-neutral-bg-color: var(--srf);
+		--fc-neutral-text-color: var(--mut);
+		--fc-border-color: var(--line);
+
+		--fc-button-bg-color: var(--acc);
+		--fc-button-border-color: var(--acc);
+		--fc-button-text-color: var(--accink);
+
+		--fc-event-bg-color: var(--acc);
+		--fc-event-border-color: var(--acc);
+		--fc-event-text-color: var(--accink);
+
+		--fc-today-bg-color: rgba(30, 136, 224, 0.12);
+		--fc-highlight-color: rgba(30, 136, 224, 0.18);
+		--fc-now-indicator-color: var(--acc);
+		--fc-non-business-color: var(--srf2);
+
+		--fc-more-link-bg-color: var(--srf2);
+		--fc-more-link-text-color: var(--ink);
+		--fc-list-event-hover-bg-color: var(--srf2);
 	}
 </style>
+
+<script>
+	// Načte cizí komponentu; když se nezaregistruje, přepne na iframe.
+	const ramec = document.querySelector<HTMLElement>('[data-rez]');
+
+	if (ramec) {
+		const { origin, styly, polyfills, hlavni } = ramec.dataset;
+		const PRVEK = 'smartservis-reservation-full';
+		const CEKANI_MS = 6000;
+
+		let vyrizeno = false;
+
+		const zaloha = () => {
+			if (vyrizeno) return;
+			vyrizeno = true;
+			const box = ramec.querySelector<HTMLElement>('[data-rez-zaloha]');
+			const ram = box?.querySelector<HTMLIFrameElement>('iframe');
+			if (ram && !ram.src) ram.src = ram.dataset.src ?? '';
+			if (box) box.hidden = false;
+			ramec.dataset.stav = 'zaloha';
+		};
+
+		const hotovo = () => {
+			if (vyrizeno) return;
+			vyrizeno = true;
+			ramec.dataset.stav = 'hotovo';
+		};
+
+		const skript = (src: string) =>
+			new Promise<void>((splneno, chyba) => {
+				const el = document.createElement('script');
+				el.src = src;
+				el.defer = true;
+				el.onload = () => splneno();
+				el.onerror = () => chyba(new Error(src));
+				document.head.appendChild(el);
+			});
+
+		const nacti = async () => {
+			const css = document.createElement('link');
+			css.rel = 'stylesheet';
+			css.href = `${origin}/${styly}`;
+			document.head.appendChild(css);
+
+			await skript(`${origin}/${polyfills}`);
+			await skript(`${origin}/${hlavni}`);
+
+			await Promise.race([
+				customElements.whenDefined(PRVEK),
+				new Promise((_, ch) => setTimeout(() => ch(new Error('timeout')), CEKANI_MS)),
+			]);
+
+			hotovo();
+		};
+
+		// Načítáme až když se sekce blíží do zorného pole — ať to nebrzdí start stránky.
+		const spustit = () => {
+			nacti().catch(() => zaloha());
+			setTimeout(zaloha, CEKANI_MS + 500);
+		};
+
+		const io = new IntersectionObserver(
+			(zaznamy) => {
+				if (!zaznamy.some((z) => z.isIntersecting)) return;
+				io.disconnect();
+				spustit();
+			},
+			{ rootMargin: '400px' },
+		);
+		io.observe(ramec);
+	}
+</script>
