@@ -5,6 +5,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { verejne } from '../lib/cesta';
 
 interface Props {
 	soubor: string;
@@ -36,7 +37,7 @@ const styl = [pomer && `aspect-ratio:${pomer}`, style].filter(Boolean).join(';')
 <div class:list={['photo', trida]} style={styl} data-rv={reveal ? '' : undefined}>
 	{
 		maFotku ? (
-			<img src={`/media/${soubor}`} alt={alt ?? popis} loading={loading} decoding="async" />
+			<img src={verejne(`media/${soubor}`)} alt={alt ?? popis} loading={loading} decoding="async" />
 		) : (
 			<span class="photo__note">FOTO · {popis}</span>
 		)

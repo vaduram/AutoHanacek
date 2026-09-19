@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Image } from 'astro:assets';
 import logo from '../assets/logo.png';
+import { verejne } from '../lib/cesta';
 import { firma, hero, navigace, rezervacePanel, titulek } from '../data/site';
 
 const media = (s: string) => path.join(process.cwd(), 'public', 'media', s);
@@ -21,13 +22,13 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 					loop
 					playsinline
 					preload="metadata"
-					poster={maPoster ? '/media/hero-poster.jpg' : undefined}
+					poster={maPoster ? verejne('media/hero-poster.jpg') : undefined}
 				>
-					<source src="/media/hero.mp4" type="video/mp4" />
+					<source src={verejne('media/hero.mp4')} type="video/mp4" />
 				</video>
 			)
 		}
-		{maPoster && !maVideo && <img class="hero__video" src="/media/hero-poster.jpg" alt="" />}
+		{maPoster && !maVideo && <img class="hero__video" src={verejne('media/hero-poster.jpg')} alt="" />}
 		<div class="hero__streak hero__streak--wide"></div>
 		<div class="hero__streak hero__streak--thin"></div>
 		<div class="hero__grain"></div>

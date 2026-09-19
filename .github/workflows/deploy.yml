@@ -24,6 +24,10 @@ jobs:
 
       - name: Nainstalovat, sestavit a odeslat web
         uses: withastro/action@v6
+        env:
+          # Náhled na vaduram.github.io/AutoHanacek/.
+          # Až bude hotové DNS: smazat tyhle dva řádky a přidat public/CNAME.
+          GITHUB_PAGES: 'true'
 
   deploy:
     needs: build

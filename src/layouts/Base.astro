@@ -8,6 +8,7 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 
+import { verejne } from '../lib/cesta';
 import { firma, seo } from '../data/site';
 
 interface Props {
@@ -62,7 +63,7 @@ const jsonLd = {
 		<meta property="og:locale" content="cs_CZ" />
 		<meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)" />
 		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="icon" href={verejne('favicon.svg')} type="image/svg+xml" />
 
 		{/* Téma se musí nastavit před vykreslením, jinak blikne. */}
 		<script is:inline>
