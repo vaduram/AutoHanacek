@@ -26,27 +26,41 @@ const iframeSrc = rezervace.urlSNavratem(zpet);
 			<span class="label">Kalendář ukazuje skutečně volná stání</span>
 		</div>
 
-		<div class="rez__ramec" data-rez data-origin={k.puvod} data-styly={k.styly} data-polyfills={k.polyfills} data-hlavni={k.hlavni}>
-			<!-- nativní komponenta -->
-			<div class="rez__widget" data-rez-widget>
-				<smartservis-reservation-full
-					api-url={k.apiUrl}
-					logo-url={k.logoUrl}
-					user-guid={k.userGuid}
-					back-url={zpet}></smartservis-reservation-full>
-			</div>
+		<div
+			class="rez__ramec"
+			data-stav={k.povoleno ? undefined : 'zaloha'}
+			data-rez={k.povoleno ? '' : undefined}
+			data-origin={k.puvod}
+			data-styly={k.styly}
+			data-polyfills={k.polyfills}
+			data-hlavni={k.hlavni}
+		>
+			{
+				k.povoleno && (
+					<>
+						<div class="rez__widget" data-rez-widget>
+							<smartservis-reservation-full
+								api-url={k.apiUrl}
+								logo-url={k.logoUrl}
+								user-guid={k.userGuid}
+								back-url={zpet}
+							/>
+						</div>
 
-			<div class="rez__nacitani" data-rez-nacitani>
-				<span class="rez__spinner" aria-hidden="true"></span>
-				<span>Načítám kalendář…</span>
-			</div>
+						<div class="rez__nacitani" data-rez-nacitani>
+							<span class="rez__spinner" aria-hidden="true" />
+							<span>Načítám kalendář…</span>
+						</div>
+					</>
+				)
+			}
 
-			<!-- pojistka, aktivuje se jen když se komponenta nenačte -->
-			<div class="rez__zaloha" data-rez-zaloha hidden>
+			<div class="rez__zaloha" data-rez-zaloha hidden={k.povoleno}>
 				<iframe
 					title="Online rezervace pneuservisu — Hanáček Auto"
 					loading="lazy"
 					referrerpolicy="no-referrer-when-downgrade"
+					src={k.povoleno ? undefined : iframeSrc}
 					data-src={iframeSrc}></iframe>
 			</div>
 		</div>

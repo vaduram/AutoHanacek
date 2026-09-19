@@ -49,6 +49,17 @@ export const rezervace = {
 	 * Ověřeno 18. 9. 2026.
 	 */
 	komponenta: {
+		/**
+		 * VYPNUTO. Komponenta se sice zaregistruje, ale pak zamrzne na vlastním
+		 * načítání dat — spinner donekonečna. Zvenčí se to ladit nedá a iframe
+		 * funguje, takže jedeme na něm.
+		 *
+		 * Zapnout až po domluvě s PneuB2B (stabilní URL bundlu + podporovaný
+		 * postup vložení). Pak je potřeba pojistku dodělat tak, aby hlídala
+		 * i vykreslení obsahu, ne jen registraci prvku.
+		 */
+		povoleno: false,
+
 		puvod: 'https://hanacekauto.rezervaceservisu.cz',
 		styly: 'styles.3027c286ed4a9b2178e0.css',
 		polyfills: 'polyfills.524ca8a87bda0d6465ec.js',
