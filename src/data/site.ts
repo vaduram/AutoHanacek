@@ -114,6 +114,8 @@ export const hero = {
 	cisla: [
 		{ hodnota: '2006', dopocitat: 2006, popis: 'v provozu od' },
 		{ hodnota: '24/7', dopocitat: null, popis: 'odtah nonstop' },
+		{ hodnota: '[?]', dopocitat: null, popis: 'opravených vozů' },
+		{ hodnota: '[?]', dopocitat: null, popis: 'spokojených zákazníků' },
 	],
 
 	/**
