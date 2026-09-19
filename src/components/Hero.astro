@@ -77,12 +77,15 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 
 			<dl class="hero__cisla" data-rvc>
 				{
-					hero.cisla.map((c) => (
-						<div>
-							<dd data-count={c.dopocitat ?? undefined}>{c.hodnota}</dd>
-							<dt>{c.popis}</dt>
-						</div>
-					))
+					hero.cisla.map((c) => {
+						const nevyplneno = c.hodnota.startsWith('[');
+						return (
+							<div class:list={[nevyplneno && 'is-nevyplneno']}>
+								<dd data-count={c.dopocitat ?? undefined}>{c.hodnota}</dd>
+								<dt>{c.popis}</dt>
+							</div>
+						);
+					})
 				}
 			</dl>
 		</div>
@@ -345,15 +348,30 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 	}
 
 	.hero__cisla {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 40px;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 28px 0;
 		margin: 44px 0 0;
 	}
 
-	.hero__cisla > div + div {
+	.hero__cisla > div {
 		border-left: 1px solid rgba(255, 255, 255, 0.14);
-		padding-left: 40px;
+		padding-left: 28px;
+	}
+
+	/* první ve sloupci nemá oddělovač, ať to nekončí čárou u kraje */
+	.hero__cisla > div:nth-child(3n + 1) {
+		border-left: 0;
+		padding-left: 0;
+	}
+
+	/* nevyplněné číslo — ať je vidět, že se má doplnit, a nevypadá jako fakt */
+	.hero__cisla > .is-nevyplneno dd {
+		color: rgba(239, 233, 223, 0.35);
+	}
+
+	.hero__cisla > .is-nevyplneno dt {
+		color: rgba(239, 233, 223, 0.3);
 	}
 
 	.hero__cisla dd {
@@ -563,11 +581,22 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 
 	@media (max-width: 560px) {
 		.hero__cisla {
-			gap: 22px;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 22px 0;
 		}
 
-		.hero__cisla > div + div {
+		.hero__cisla > div {
 			padding-left: 22px;
+		}
+
+		.hero__cisla > div:nth-child(3n + 1) {
+			border-left: 1px solid rgba(255, 255, 255, 0.14);
+			padding-left: 22px;
+		}
+
+		.hero__cisla > div:nth-child(2n + 1) {
+			border-left: 0;
+			padding-left: 0;
 		}
 
 		.hero__cisla dt {

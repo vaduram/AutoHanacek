@@ -97,11 +97,27 @@ export const hero = {
 		'Sezóna přezutí — 4 kola i s vyvážením <strong>od 950 Kč</strong>. ' +
 		'Pneuservis si objednáte online vpravo, ostatní práce telefonicky.',
 	sezonaMobil: 'Přezutí 4 kol s vyvážením <strong>od 950 Kč</strong>',
+	/**
+	 * Čísla v hero pásu.
+	 *
+	 * ⚠️ Položky s `[…]` jsou nevyplněné. Doplň skutečné hodnoty, nebo je odsud
+	 * smaž — vymyšlené číslo je u obchodního tvrzení právní problém (nekalé
+	 * obchodní praktiky) a v místě, kde servis znají, stejně neprojde.
+	 *
+	 * Kde čísla vzít: SmartServis → Zákazníci (počet záznamů), účetnictví
+	 * (počet zakázek za rok × roky), nebo skladová evidence uskladněných sad.
+	 * Starý web uváděl „přes 700 zákazníků" — bez roku, takže neověřitelné.
+	 *
+	 * Konkrétní číslo působí věrohodněji než kulaté: „1 240" věří člověk spíš
+	 * než „5 000". A hodnota s rokem („od 2006") je ověřitelná, tedy bezpečná.
+	 */
 	cisla: [
 		{ hodnota: '950', dopocitat: 950, popis: 'Kč / 4 kola' },
 		{ hodnota: '2006', dopocitat: 2006, popis: 'v provozu od' },
 		{ hodnota: '24/7', dopocitat: null, popis: 'odtah nonstop' },
 		{ hodnota: '9', dopocitat: 9, popis: 'oborů pod jednou střechou' },
+		{ hodnota: '[?]', dopocitat: null, popis: 'opravených vozů' },
+		{ hodnota: '[?]', dopocitat: null, popis: 'zákazníků' },
 	],
 };
 
