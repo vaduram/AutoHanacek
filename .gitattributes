@@ -1,0 +1,10 @@
+# Build běží na Linuxu (GitHub Actions), v repozitáři držíme LF.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.webp binary
+*.mp4 binary
+*.woff binary
+*.woff2 binary
+*.ico binary

@@ -1,0 +1,137 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import { firma, oteviraciDoba } from '../data/site';
+---
+
+<footer id="kontakt">
+	<div class="wrap paticka">
+		<div class="paticka__znacka">
+			<Image src={logo} alt={firma.znacka} height={88} densities={[1, 2]} />
+			<p>
+				{firma.nazev}<br />
+				{firma.ulice}<br />
+				{firma.psc} {firma.mesto}
+			</p>
+		</div>
+
+		<div>
+			<p class="paticka__nadpis">Kontakt</p>
+			<p class="paticka__text">
+				<a href={firma.telefonHref} class="paticka__tel">{firma.telefon}</a><br />
+				<a href={`mailto:${firma.email}`} class="paticka__odkaz">{firma.email}</a>
+			</p>
+		</div>
+
+		<div>
+			<p class="paticka__nadpis">Otevírací doba</p>
+			<p class="paticka__text">
+				{oteviraciDoba.map((d) => <>{d.den} {d.cas}<br /></>)}
+				<span class="paticka__nonstop">Odtah NONSTOP</span>
+			</p>
+		</div>
+
+		<div>
+			<p class="paticka__nadpis">Firma</p>
+			<p class="paticka__text">
+				IČO {firma.ico}<br />
+				DIČ {firma.dic}<br />
+				{/* Právní texty zatím neexistují — doplnit před spuštěním, viz README. */}
+				<span class="paticka__todo">[odkazy: GDPR, cookies]</span>
+			</p>
+		</div>
+	</div>
+
+	<div class="paticka__spodek">
+		<div class="wrap paticka__spodek-obsah">
+			<span>© {new Date().getFullYear()} {firma.nazev} · Auto-Pneu-Servis</span>
+			<span>{firma.spadovaOblast.join(' · ')}</span>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.paticka {
+		display: grid;
+		grid-template-columns: minmax(0, 1.1fr) repeat(3, minmax(0, 1fr));
+		gap: 40px;
+		padding-block: 64px 40px;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.paticka__znacka img {
+		height: 44px;
+		width: auto;
+		margin-bottom: 20px;
+	}
+
+	.paticka__nadpis {
+		font-family: var(--font-mono);
+		font-weight: 600;
+		font-size: 10px;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--grey);
+		margin-bottom: 14px;
+	}
+
+	.paticka p:not(.paticka__nadpis) {
+		font-size: 15px;
+		line-height: 1.8;
+		color: var(--mut);
+	}
+
+	.paticka__tel {
+		color: var(--ink);
+		text-decoration: none;
+		font-weight: 600;
+	}
+
+	.paticka__odkaz {
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.paticka__tel:hover,
+	.paticka__odkaz:hover {
+		color: var(--acc);
+	}
+
+	.paticka__nonstop {
+		color: var(--acc);
+		font-weight: 600;
+	}
+
+	.paticka__todo {
+		color: var(--grey);
+		font-style: italic;
+	}
+
+	.paticka__spodek {
+		background: var(--srf2);
+	}
+
+	.paticka__spodek-obsah {
+		display: flex;
+		justify-content: space-between;
+		gap: 24px;
+		flex-wrap: wrap;
+		padding-block: 22px;
+		font-size: 12px;
+		line-height: 1.5;
+		color: var(--grey);
+	}
+
+	@media (max-width: 900px) {
+		.paticka {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 28px;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.paticka {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>

@@ -1,0 +1,65 @@
+---
+/**
+ * Skutečný rezervační kalendář SmartServis (PneuB2B).
+ *
+ * Zatím iframe — funguje spolehlivě a nerozbije se, až PneuB2B nasadí novou verzi.
+ * Jejich API má `Access-Control-Allow-Origin: *`, takže jde i nativní vložení
+ * web-componenty <smartservis-reservation-full>; k tomu ale potřebujeme od nich
+ * stabilní URL JS bundlu (dnes má v názvu content hash, který se při každém jejich
+ * nasazení mění). Postup a atributy komponenty jsou v README.
+ */
+import { firma, rezervace } from '../data/site';
+
+const zpet = new URL('/#rezervace', Astro.site ?? 'https://www.hanacekauto.cz').href;
+const src = rezervace.urlSNavratem(zpet);
+---
+
+<section class="section rez" id="rezervace">
+	<div class="wrap">
+		<div class="sec-head sec-head--tesny">
+			<h2 class="h2" data-rvc>Objednat pneuservis</h2>
+			<span class="label">Kalendář ukazuje skutečně volná stání</span>
+		</div>
+
+		<div class="rez__ramec">
+			<iframe
+				src={src}
+				title="Online rezervace pneuservisu — Hanáček Auto"
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"></iframe>
+		</div>
+
+		<p class="rez__pod">
+			Kalendář se nenačetl? <a href={rezervace.url} target="_blank" rel="noopener">Otevřete ho v novém okně</a>.
+			Servis, klimatizaci, turbo, automat nebo STK objednáme telefonicky —
+			<a href={firma.telefonHref}>{firma.telefonZobrazit}</a>, Po–Pá 7:00–16:00.
+		</p>
+	</div>
+</section>
+
+<style>
+	.rez__ramec {
+		border: 1px solid var(--line);
+		background: var(--srf);
+	}
+
+	.rez__ramec iframe {
+		display: block;
+		width: 100%;
+		height: clamp(820px, 92vh, 1180px);
+		border: 0;
+	}
+
+	.rez__pod {
+		margin-top: 18px;
+		font-size: 14px;
+		line-height: 1.7;
+		color: var(--grey);
+	}
+
+	@media (max-width: 620px) {
+		.rez__ramec iframe {
+			height: 1100px;
+		}
+	}
+</style>

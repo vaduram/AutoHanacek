@@ -1,0 +1,74 @@
+---
+import PhotoSlot from './PhotoSlot.astro';
+import { dilna } from '../data/site';
+---
+
+<section class="split" id="dilna">
+	<PhotoSlot
+		soubor={dilna.foto.soubor}
+		popis={dilna.foto.popis}
+		alt={`Dílna Hanáček Auto — ${dilna.foto.popis}`}
+		class="split__foto"
+		reveal
+	/>
+
+	<div class="split__text">
+		<div class="eyebrow" data-rvc>
+			<i></i><span>{dilna.stitek}</span>
+		</div>
+		<h2 class="h2 split__h2" data-rvc>{dilna.nadpis[0]}<br />{dilna.nadpis[1]}</h2>
+		{dilna.odstavce.map((o, i) => <p class:list={['split__p', i > 0 && 'split__p--tlum']} data-rvc>{o}</p>)}
+	</div>
+</section>
+
+<style>
+	.split {
+		display: grid;
+		grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.split :global(.split__foto) {
+		min-height: 520px;
+	}
+
+	.split__text {
+		padding: clamp(40px, 6vw, 72px) var(--pad);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background: var(--srf);
+	}
+
+	.split__h2 {
+		font-size: clamp(32px, 4vw, 48px);
+		line-height: 1;
+		margin: 22px 0;
+	}
+
+	.split__p {
+		max-width: 40ch;
+		font-size: clamp(15px, 1.3vw, 17px);
+		line-height: 1.7;
+		color: var(--mut);
+	}
+
+	.split__p + .split__p {
+		margin-top: 16px;
+	}
+
+	.split__p--tlum {
+		color: var(--grey);
+	}
+
+	@media (max-width: 900px) {
+		.split {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.split :global(.split__foto) {
+			min-height: 0;
+			aspect-ratio: 4 / 3;
+		}
+	}
+</style>

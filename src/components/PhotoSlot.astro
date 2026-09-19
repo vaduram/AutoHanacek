@@ -1,0 +1,44 @@
+---
+/**
+ * Místo pro fotku. Když soubor v public/media/ existuje, vykreslí se.
+ * Když ne, zůstane popsaná atrapa s instrukcí, co nafotit — nikdy rozbitý obrázek.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+	soubor: string;
+	popis: string;
+	pomer?: string;
+	alt?: string;
+	class?: string;
+	style?: string;
+	reveal?: boolean;
+	loading?: 'lazy' | 'eager';
+}
+
+const {
+	soubor,
+	popis,
+	pomer,
+	alt,
+	class: trida,
+	style,
+	reveal = false,
+	loading = 'lazy',
+} = Astro.props;
+
+const cesta = path.join(process.cwd(), 'public', 'media', soubor);
+const maFotku = fs.existsSync(cesta);
+const styl = [pomer && `aspect-ratio:${pomer}`, style].filter(Boolean).join(';') || undefined;
+---
+
+<div class:list={['photo', trida]} style={styl} data-rv={reveal ? '' : undefined}>
+	{
+		maFotku ? (
+			<img src={`/media/${soubor}`} alt={alt ?? popis} loading={loading} decoding="async" />
+		) : (
+			<span class="photo__note">FOTO · {popis}</span>
+		)
+	}
+</div>

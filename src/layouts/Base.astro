@@ -1,0 +1,177 @@
+---
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
+import '@fontsource/barlow/600.css';
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/global.css';
+
+import { firma, seo } from '../data/site';
+
+interface Props {
+	titulek?: string;
+	popis?: string;
+}
+
+const { titulek = seo.titulek, popis = seo.popis } = Astro.props;
+const kanonicka = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'AutoRepair',
+	name: firma.nazev,
+	alternateName: firma.znacka,
+	url: Astro.site?.href,
+	telephone: firma.telefon,
+	email: firma.email,
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: firma.ulice,
+		postalCode: firma.psc,
+		addressLocality: firma.mesto,
+		addressCountry: 'CZ',
+	},
+	areaServed: firma.spadovaOblast,
+	foundingDate: String(firma.zalozeno),
+	openingHoursSpecification: [
+		{
+			'@type': 'OpeningHoursSpecification',
+			dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+			opens: '07:00',
+			closes: '16:00',
+		},
+	],
+	identifier: firma.ico,
+	vatID: firma.dic,
+};
+---
+
+<!doctype html>
+<html lang="cs" class="no-js">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<title>{titulek}</title>
+		<meta name="description" content={popis} />
+		<link rel="canonical" href={kanonicka} />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={titulek} />
+		<meta property="og:description" content={popis} />
+		<meta property="og:locale" content="cs_CZ" />
+		<meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)" />
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+		{/* Téma se musí nastavit před vykreslením, jinak blikne. */}
+		<script is:inline>
+			document.documentElement.classList.remove('no-js');
+			try {
+				var t = localStorage.getItem('tema');
+				if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+			} catch (e) {}
+		</script>
+
+		<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+	</head>
+	<body>
+		<a href="#obsah" class="visually-hidden">Přeskočit na obsah</a>
+		<div class="progress" aria-hidden="true"><i></i></div>
+		<slot />
+
+		<script>
+			// Reveal při scrollu
+			const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const kAnimaci = document.querySelectorAll<HTMLElement>('[data-rvc],[data-rv]');
+			if (!reduced) {
+				// Schováváme až tady — kdyby tenhle skript spadl, obsah zůstane vidět.
+				kAnimaci.forEach((el) => el.classList.add('is-hidden'));
+				const io = new IntersectionObserver(
+					(entries) => {
+						for (const e of entries) {
+							if (!e.isIntersecting) continue;
+							const el = e.target as HTMLElement;
+							const sourozenci = Array.from(el.parentElement?.children ?? []).filter((n) =>
+								(n as HTMLElement).hasAttribute('data-rvc'),
+							);
+							const i = Math.max(0, sourozenci.indexOf(el));
+							el.style.animationDelay = `${i * 0.12}s`;
+							el.classList.remove('is-hidden');
+							el.classList.add('is-in');
+							io.unobserve(el);
+						}
+					},
+					{ threshold: 0.05, rootMargin: '0px 0px -8% 0px' },
+				);
+				kAnimaci.forEach((el) => io.observe(el));
+				// pojistka, aby nic nezůstalo neviditelné
+				setTimeout(() => kAnimaci.forEach((el) => el.classList.remove('is-hidden')), 2500);
+			}
+
+			// Dopočítávání čísel
+			if (!reduced) {
+				const cisla = new IntersectionObserver(
+					(entries) => {
+						for (const e of entries) {
+							if (!e.isIntersecting) continue;
+							const el = e.target as HTMLElement;
+							const cil = Number(el.dataset.count);
+							if (!Number.isFinite(cil)) {
+								cisla.unobserve(el);
+								continue;
+							}
+							const zacatek = performance.now();
+							const trvani = 1100;
+							const krok = (t: number) => {
+								const p = Math.min(1, (t - zacatek) / trvani);
+								const e2 = 1 - Math.pow(1 - p, 3);
+								el.textContent = String(Math.round(cil * e2));
+								if (p < 1) requestAnimationFrame(krok);
+							};
+							requestAnimationFrame(krok);
+							cisla.unobserve(el);
+						}
+					},
+					{ threshold: 0.5 },
+				);
+				document.querySelectorAll('[data-count]').forEach((el) => cisla.observe(el));
+			}
+
+			// Ukazatel scrollu
+			const pruh = document.querySelector<HTMLElement>('.progress i');
+			if (pruh && !reduced) {
+				let ceka = false;
+				const prepocitat = () => {
+					const max = document.documentElement.scrollHeight - window.innerHeight;
+					pruh.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+					ceka = false;
+				};
+				addEventListener(
+					'scroll',
+					() => {
+						if (ceka) return;
+						ceka = true;
+						requestAnimationFrame(prepocitat);
+					},
+					{ passive: true },
+				);
+				prepocitat();
+			}
+
+			// Přepínač tématu
+			document.querySelectorAll('[data-theme-toggle]').forEach((b) =>
+				b.addEventListener('click', () => {
+					const ted =
+						document.documentElement.dataset.theme ??
+						(matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+					const dalsi = ted === 'dark' ? 'light' : 'dark';
+					document.documentElement.dataset.theme = dalsi;
+					try {
+						localStorage.setItem('tema', dalsi);
+					} catch (e) {}
+				}),
+			);
+		</script>
+	</body>
+</html>

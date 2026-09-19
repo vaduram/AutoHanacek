@@ -1,0 +1,86 @@
+---
+import PhotoSlot from './PhotoSlot.astro';
+import { specializace } from '../data/site';
+---
+
+<section class="section section--srf">
+	<div class="wrap">
+		<div class="sec-head">
+			<h2 class="h2" data-rvc>{specializace.nadpis[0]}<br />{specializace.nadpis[1]}</h2>
+			<p class="sec-perex" data-rvc>{specializace.perex}</p>
+		</div>
+
+		<ul class="spec">
+			{
+				specializace.karty.map((k) => (
+					<li data-rv>
+						<PhotoSlot soubor={k.foto.soubor} popis={k.foto.popis} pomer={k.foto.pomer} alt={`${k.nazev} — ${k.foto.popis}`} />
+						<div class="spec__text">
+							<h3>{k.nazev}</h3>
+							<p>{k.text}</p>
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.spec {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 20px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.spec li {
+		border: 1px solid var(--line);
+		background: var(--bg);
+		display: flex;
+		flex-direction: column;
+	}
+
+	.spec__text {
+		padding: 22px 22px 26px;
+	}
+
+	.spec h3 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 24px;
+		line-height: 1.05;
+		text-transform: uppercase;
+		color: var(--ink);
+		margin-bottom: 10px;
+	}
+
+	.spec p {
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--mut);
+	}
+
+	@media (max-width: 1000px) {
+		.spec {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.spec {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 12px;
+		}
+
+		.spec__text {
+			padding: 14px;
+		}
+
+		.spec h3 {
+			font-size: 20px;
+		}
+	}
+</style>

@@ -1,0 +1,152 @@
+---
+import { cenik } from '../data/site';
+---
+
+<section class="section" id="ceny">
+	<div class="wrap">
+		<div class="sec-head sec-head--tesny">
+			<h2 class="h2" data-rvc>{cenik.nadpis}</h2>
+			<span class="label">{cenik.poznamka}</span>
+		</div>
+
+		<div class="cenik">
+			{
+				cenik.polozky.map((p) => (
+					<article class="cenik__radek" data-rv>
+						<span class="cenik__cislo">{p.cislo}</span>
+						<h3 class="cenik__nazev">{p.nazev}</h3>
+						<p class="cenik__popis">{p.popis}</p>
+						<span class:list={['cenik__cena', !p.zvyraznit && 'cenik__cena--tlum']}>
+							<span class="only-desktop">{p.cena}</span>
+							<span class="only-mobile">{p.cenaMobil}</span>
+						</span>
+					</article>
+				))
+			}
+		</div>
+
+		<p class="cenik__dale">{cenik.dale}</p>
+	</div>
+</section>
+
+<style>
+	.sec-head--tesny {
+		align-items: baseline;
+		margin-bottom: clamp(24px, 3.5vw, 44px);
+	}
+
+	.cenik {
+		border-top: 1px solid var(--line);
+	}
+
+	.cenik__radek {
+		display: grid;
+		grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1.2fr) 200px;
+		align-items: baseline;
+		border-bottom: 1px solid var(--line);
+		transition: background 0.35s;
+	}
+
+	.cenik__radek:hover {
+		background: var(--srf);
+	}
+
+	.cenik__radek > * {
+		padding: 26px 0;
+	}
+
+	.cenik__cislo {
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 12px;
+		letter-spacing: 0.16em;
+		color: var(--acc);
+	}
+
+	.cenik__nazev {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 27px;
+		line-height: 1.05;
+		text-transform: uppercase;
+		color: var(--ink);
+		padding-right: 20px;
+	}
+
+	.cenik__popis {
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--mut);
+		padding-right: 20px;
+	}
+
+	.cenik__cena {
+		text-align: right;
+		font-family: var(--font-mono);
+		font-weight: 600;
+		font-size: 20px;
+		line-height: 1.2;
+		color: var(--ink);
+		white-space: nowrap;
+	}
+
+	.cenik__cena--tlum {
+		font-weight: 500;
+		font-size: 15px;
+		color: var(--mut);
+	}
+
+	.cenik__dale {
+		margin-top: 24px;
+		font-size: 15px;
+		line-height: 1.7;
+		color: var(--grey);
+	}
+
+	@media (max-width: 1000px) {
+		.cenik__radek {
+			grid-template-columns: 40px minmax(0, 1fr) auto;
+			column-gap: 12px;
+		}
+
+		.cenik__cislo {
+			grid-row: 1;
+		}
+
+		.cenik__nazev {
+			grid-row: 1;
+			font-size: 22px;
+			padding-bottom: 0;
+		}
+
+		.cenik__cena {
+			grid-row: 1;
+			padding-bottom: 0;
+		}
+
+		.cenik__popis {
+			grid-column: 2 / -1;
+			grid-row: 2;
+			padding-top: 8px;
+			font-size: 14px;
+		}
+
+		.cenik__radek > * {
+			padding-block: 18px;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.cenik__nazev {
+			font-size: 18px;
+		}
+
+		.cenik__cena {
+			font-size: 14px;
+		}
+
+		.cenik__cena--tlum {
+			font-size: 12px;
+		}
+	}
+</style>

@@ -1,0 +1,78 @@
+---
+import { firma } from '../data/site';
+---
+
+<div class="mlista">
+	<a href={firma.telefonHref} class="mlista__tel">Zavolat</a>
+	<a href="#rezervace" class="mlista__cta">
+		<span class="sweep" aria-hidden="true"></span>
+		<span>Objednat termín</span>
+	</a>
+</div>
+
+<style is:global>
+	@media (max-width: 760px) {
+		body {
+			padding-bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+		}
+	}
+</style>
+
+<style>
+	.mlista {
+		display: none;
+	}
+
+	@media (max-width: 760px) {
+		.mlista {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 50;
+			display: grid;
+			grid-template-columns: 1fr 1.35fr;
+			gap: 1px;
+			background: var(--line);
+			border-top: 1px solid var(--line);
+			padding-bottom: env(safe-area-inset-bottom, 0px);
+		}
+
+		.mlista a {
+			height: 62px;
+			display: grid;
+			place-items: center;
+			font-family: var(--font-display);
+			font-weight: 700;
+			font-size: 14px;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			text-decoration: none;
+		}
+
+		.mlista__tel {
+			background: var(--bg);
+			color: var(--ink);
+		}
+
+		.mlista__cta {
+			position: relative;
+			overflow: hidden;
+			background: var(--acc);
+			color: var(--accink);
+		}
+
+		.mlista__cta .sweep {
+			position: absolute;
+			inset: 0;
+			width: 34%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+			animation: sweep 5s ease-in-out infinite;
+			pointer-events: none;
+		}
+
+		.mlista__cta span:not(.sweep) {
+			position: relative;
+		}
+	}
+</style>

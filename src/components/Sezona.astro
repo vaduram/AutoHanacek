@@ -1,0 +1,109 @@
+---
+import { sezona } from '../data/site';
+---
+
+<section class="section">
+	<div class="wrap">
+		<div class="sec-head">
+			<h2 class="h2" data-rvc>{sezona.nadpis[0]}<br />{sezona.nadpis[1]}</h2>
+			<p class="sec-perex" data-rvc>{sezona.perex}</p>
+		</div>
+
+		<ol class="ctyri">
+			{
+				sezona.body.map((b) => (
+					<li data-rv>
+						<span class="ctyri__cislo">{b.cislo}</span>
+						<h3>{b.nazev}</h3>
+						<p>{b.text}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.ctyri {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		border-top: 1px solid var(--line);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.ctyri li {
+		padding: 32px 28px 36px;
+		border-right: 1px solid var(--line);
+		transition: background 0.4s;
+	}
+
+	.ctyri li:last-child {
+		border-right: 0;
+	}
+
+	.ctyri li:hover {
+		background: var(--srf);
+	}
+
+	.ctyri__cislo {
+		display: block;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 11px;
+		letter-spacing: 0.2em;
+		color: var(--acc);
+		margin-bottom: 26px;
+	}
+
+	.ctyri h3 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 26px;
+		line-height: 1.1;
+		text-transform: uppercase;
+		color: var(--ink);
+		margin-bottom: 12px;
+	}
+
+	.ctyri p {
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--mut);
+	}
+
+	@media (max-width: 1000px) {
+		.ctyri {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.ctyri li:nth-child(2n) {
+			border-right: 0;
+		}
+
+		.ctyri li:nth-child(-n + 2) {
+			border-bottom: 1px solid var(--line);
+		}
+	}
+
+	@media (max-width: 620px) {
+		.ctyri {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.ctyri li {
+			border-right: 0;
+			border-bottom: 1px solid var(--line);
+			padding: 22px 0 24px;
+		}
+
+		.ctyri__cislo {
+			margin-bottom: 10px;
+		}
+
+		.ctyri h3 {
+			font-size: 22px;
+		}
+	}
+</style>
