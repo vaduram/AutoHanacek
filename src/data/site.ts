@@ -208,25 +208,25 @@ export const specializace = {
 			nazev: 'Turbodmychadla',
 			text: 'GARRETT, HOLSET, IHI, KKK, MITSUBISHI, SCHWITZER. Rozebrání a kontrola zdarma, oprava od 1 999 Kč.',
 			textKratky: 'GARRETT, HOLSET, IHI, KKK. Rozebrání a kontrola zdarma.',
-			foto: { soubor: 'turbo.jpg', popis: 'rozebrané turbo na ponku, detail kompresorového kola', pomer: '4 / 3' },
+			foto: { soubor: 'turbo.jpg', video: 'turbo.mp4', popis: 'rozebrané turbo na ponku, detail kompresorového kola', pomer: '4 / 3' },
 		},
 		{
 			nazev: 'Olej v automatu',
 			text: 'Strojní proplach s filtrem. Bez plničky vyteče jen polovina náplně, zbytek zůstane v měniči a chladiči. Interval 60 000 km.',
 			textKratky: 'Strojní proplach s filtrem, interval 60 000 km.',
-			foto: { soubor: 'automat.jpg', popis: 'strojní plnička připojená k automatu, hadice a průhledné trubice', pomer: '4 / 3' },
+			foto: { soubor: 'automat.jpg', video: 'automat.mp4', popis: 'strojní plnička připojená k automatu, hadice a průhledné trubice', pomer: '4 / 3' },
 		},
 		{
 			nazev: 'Klimatizace',
 			text: 'R134a i novější R1234yf, dezinfekce výparníku, ozonové čištění, pylový filtr. Diagnostika od 399 Kč.',
 			textKratky: 'R134a i R1234yf, dezinfekce, ozon, pylový filtr.',
-			foto: { soubor: 'klima.jpg', popis: 'plnička klimatizace u otevřené kapoty, displej stanice', pomer: '4 / 3' },
+			foto: { soubor: 'klima.jpg', video: 'klima.mp4', popis: 'plnička klimatizace u otevřené kapoty, displej stanice', pomer: '4 / 3' },
 		},
 		{
 			nazev: 'Odtah NONSTOP',
 			text: 'Osobní i dodávková vozidla do 3,5 t, kdykoliv. Od 25 Kč/km.',
 			textKratky: 'Osobní i dodávková vozidla do 3,5 t. Od 25 Kč/km.',
-			foto: { soubor: 'odtah.jpg', popis: 'odtahový vůz s naloženým autem za tmy, modré světlo', pomer: '4 / 3' },
+			foto: { soubor: 'odtah.jpg', video: 'odtah.mp4', popis: 'odtahový vůz s naloženým autem za tmy, modré světlo', pomer: '4 / 3' },
 		},
 	],
 };
@@ -237,13 +237,13 @@ export const galerie = {
 		'Dvě stání, zvedáky, vlastní pneuservisní i diagnostické vybavení. ' +
 		'Uvidíte, kam auto necháváte.',
 	fotky: [
-		{ soubor: 'hala.jpg', popis: 'celkový pohled do haly se dvěma zvedáky, denní světlo z vrat', sloupce: 3, radky: 2, mobil: 2 },
+		{ soubor: 'hala.jpg', popis: 'hala dílny se zvedáky, vůz na stání', sloupce: 3, radky: 2, mobil: 2 },
 		{ soubor: 'prezouvacka.jpg', popis: 'přezouvací stroj s kolem, ruce v rukavicích', sloupce: 2, radky: 1, mobil: 1 },
-		{ soubor: 'vyvazovacka.jpg', popis: 'vyvažovačka', sloupce: 1, radky: 1, mobil: 1 },
+		{ soubor: 'vyvazovacka.jpg', popis: 'vyvažovačka s nasazeným kolem', sloupce: 1, radky: 1, mobil: 1 },
 		{ soubor: 'regal-pneu.jpg', popis: 'regál s uskladněnými sadami pneu, popsané sady', sloupce: 3, radky: 1, mobil: 2 },
-		{ soubor: 'diagnostika.jpg', popis: 'diagnostika s notebookem u vozu', sloupce: 2, radky: 1, mobil: 1 },
-		{ soubor: 'ponk.jpg', popis: 'srovnané nářadí na ponku, shora', sloupce: 2, radky: 1, mobil: 1 },
-		{ soubor: 'budova.jpg', popis: 'budova dílny zvenku z Velkomoravské', sloupce: 2, radky: 1, mobil: 2 },
+		{ soubor: 'motor.jpg', popis: 'práce v motorovém prostoru', sloupce: 2, radky: 1, mobil: 1 },
+		{ soubor: 'ponk.jpg', popis: 'nářadí na stěně nad ponkem', sloupce: 2, radky: 1, mobil: 1 },
+		{ soubor: 'budova.jpg', popis: 'budova dílny zvenku', sloupce: 2, radky: 1, mobil: 2 },
 	],
 };
 
@@ -256,8 +256,9 @@ export const dilna = {
 		'Jezdí k nám z Moravského Písku, Bzence a Veselí nad Moravou.',
 	],
 	foto: {
-		soubor: 'prezouvaci-stroj.jpg',
-		popis: 'přezouvací stroj s kolem, ruce mechanika v rukavicích, jedno boční světlo',
+		soubor: 'dilna.jpg',
+		video: 'dilna.mp4',
+		popis: 'budova autoservisu s nápisem AUTO-PNEU-SERVIS a parkovištěm',
 		pomer: '4 / 3',
 	},
 };

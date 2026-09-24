@@ -160,6 +160,43 @@ const jsonLd = {
 				prepocitat();
 			}
 
+			// Video smyčky jen na tabletu a větším, na mobilu zůstává fotka a video se nestahuje.
+			const smycky = document.querySelectorAll<HTMLVideoElement>('video[data-smycka]');
+			const setriData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+			if (smycky.length && !reduced && !setriData) {
+				// Výška vyřadí telefon na šířku, ten má i přes 900 px šířky jen ~430 px výšky.
+				const tablet = matchMedia('(min-width: 700px) and (min-height: 500px)');
+				const naObrazovce = new Set<HTMLVideoElement>();
+
+				const obnovit = (v: HTMLVideoElement) => {
+					if (tablet.matches && naObrazovce.has(v)) {
+						if (!v.hasAttribute('src')) v.src = v.dataset.smycka!;
+						v.play().catch(() => {});
+						return;
+					}
+					v.pause();
+					if (!tablet.matches) v.classList.remove('is-hraje');
+				};
+
+				const io = new IntersectionObserver(
+					(entries) => {
+						for (const e of entries) {
+							const v = e.target as HTMLVideoElement;
+							if (e.isIntersecting) naObrazovce.add(v);
+							else naObrazovce.delete(v);
+							obnovit(v);
+						}
+					},
+					{ rootMargin: '200px 0px' },
+				);
+
+				smycky.forEach((v) => {
+					v.addEventListener('playing', () => v.classList.add('is-hraje'));
+					io.observe(v);
+				});
+				tablet.addEventListener('change', () => smycky.forEach(obnovit));
+			}
+
 			// Přepínač tématu
 			document.querySelectorAll('[data-theme-toggle]').forEach((b) =>
 				b.addEventListener('click', () => {

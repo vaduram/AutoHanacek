@@ -2,6 +2,11 @@
 /**
  * Místo pro fotku. Když soubor v public/media/ existuje, vykreslí se.
  * Když ne, zůstane popsaná atrapa s instrukcí, co nafotit — nikdy rozbitý obrázek.
+ *
+ * Volitelné `video` je smyčka přes fotku jen pro tablet a větší. Na mobilu
+ * se nestahuje vůbec a zůstává fotka, stejně jako při omezení pohybu,
+ * úsporném režimu dat nebo když prohlížeč přehrání odmítne.
+ * Přehrávání řídí skript v Base.astro podle atributu data-smycka.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,6 +15,7 @@ import { verejne } from '../lib/cesta';
 interface Props {
 	soubor: string;
 	popis: string;
+	video?: string;
 	pomer?: string;
 	alt?: string;
 	class?: string;
@@ -21,6 +27,7 @@ interface Props {
 const {
 	soubor,
 	popis,
+	video,
 	pomer,
 	alt,
 	class: trida,
@@ -29,8 +36,9 @@ const {
 	loading = 'lazy',
 } = Astro.props;
 
-const cesta = path.join(process.cwd(), 'public', 'media', soubor);
-const maFotku = fs.existsSync(cesta);
+const existuje = (s: string) => fs.existsSync(path.join(process.cwd(), 'public', 'media', s));
+const maFotku = existuje(soubor);
+const maVideo = video !== undefined && existuje(video);
 const styl = [pomer && `aspect-ratio:${pomer}`, style].filter(Boolean).join(';') || undefined;
 ---
 
@@ -40,6 +48,21 @@ const styl = [pomer && `aspect-ratio:${pomer}`, style].filter(Boolean).join(';')
 			<img src={verejne(`media/${soubor}`)} alt={alt ?? popis} loading={loading} decoding="async" />
 		) : (
 			<span class="photo__note">FOTO · {popis}</span>
+		)
+	}
+	{
+		maVideo && (
+			<video
+				class="photo__smycka"
+				data-smycka={verejne(`media/${video}`)}
+				muted
+				loop
+				playsinline
+				disablepictureinpicture
+				preload="none"
+				aria-hidden="true"
+				tabindex="-1"
+			/>
 		)
 	}
 </div>

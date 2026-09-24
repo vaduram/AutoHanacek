@@ -8,8 +8,8 @@ Dokud chybí, zobrazí se tmavé pole s popisem záběru, ne rozbitý obrázek.
 
 | Soubor | Co to je |
 |---|---|
-| `hero.mp4` | Smyčka 8–12 s, **bez zvuku**, ořez 21:9. Auto na zvedáku v šeru dílny, jedno teplé světlo z boku, modrý odlesk. Pomalé, bez rychlých střihů. Web ji ztmaví a odbarví sám — nedodávej už upravené. Cíl do 3 MB, H.264. |
-| `hero-poster.jpg` | První snímek z videa. Použije se, než se video načte, a na pomalém připojení místo něj. |
+| `hero.mp4` | Smyčka 8–12 s, **bez zvuku**, H.264, cíl do 3 MB. Teď je tu povolování kola utahovačkou (IMG_3256), čtverec 1080 × 1080 — web ho ořízne podle obrazovky, na monitoru zůstane jen pás kolem středu. Web ji ztmaví a odbarví sám — nedodávej už upravené. Běží jen na tabletu a větším. |
+| `hero-poster.jpg` | První snímek z videa. Je vidět, než se video načte, a na mobilu je jediný — video se tam nestahuje. |
 
 Video není povinné — bez něj hero použije `hero-poster.jpg`, a bez obojího
 zůstane tmavý gradient se světelnými pruhy. Vypadá to dobře, ale je to slabší.
@@ -23,23 +23,37 @@ zůstane tmavý gradient se světelnými pruhy. Vypadá to dobře, ale je to sla
 | `klima.jpg` | Plnička klimatizace u otevřené kapoty, displej stanice |
 | `odtah.jpg` | Odtahový vůz s naloženým autem za tmy, modré světlo |
 
+Ke každé kartě může být i video se stejným názvem: `turbo.mp4`, `automat.mp4`,
+`klima.mp4`, `odtah.mp4`. Na tabletu a notebooku se přes fotku prolne a běží ve
+smyčce, na mobilu zůstane jen fotka a video se tam vůbec nestahuje. Fotka je
+proto dál potřeba — na mobilu je jediná a jinde je vidět, než se video načte.
+
+- Smyčka 6–10 s, **bez zvuku** (zvukovou stopu při exportu vypni), ořez 4:3.
+- 960 × 720 px stačí, karta je na monitoru široká zhruba 340 px.
+- H.264, cíl do 1,5 MB na video — na stránce jsou čtyři najednou.
+- Konec navázat na začátek, ať smyčka necukne.
+
 ## Galerie dílny
 
-| Soubor | Co nafotit |
-|---|---|
-| `hala.jpg` | Celkový pohled do haly se dvěma zvedáky, denní světlo z vrat (3:2) |
-| `prezouvacka.jpg` | Přezouvací stroj s kolem, ruce v rukavicích (3:2) |
-| `vyvazovacka.jpg` | Vyvažovačka (1:1) |
-| `regal-pneu.jpg` | Regál s uskladněnými sadami pneu, popsané sady (2:1) |
-| `diagnostika.jpg` | Diagnostika s notebookem u vozu (3:2) |
-| `ponk.jpg` | Srovnané nářadí na ponku, shora (3:2) |
-| `budova.jpg` | Budova dílny zvenku z Velkomoravské (3:2) |
+Teď jsou tu snímky vytažené z videí ve `Video/202609_a` (zdroj = `IMG_xxxx.MOV`).
+Web je ořezává na střed podle velikosti dlaždice, proto stačí 16:9 nebo 3:2.
+
+| Soubor | Co je na něm | Zdroj |
+|---|---|---|
+| `hala.jpg` | Hala se zvedáky, vůz na stání | 3276 |
+| `prezouvacka.jpg` | Přezouvací stroj s kolem, ruce v rukavicích | 3268 |
+| `vyvazovacka.jpg` | Vyvažovačka s nasazeným kolem | 3267 |
+| `regal-pneu.jpg` | Regál s uskladněnými sadami pneu, popsané sady | 3295 |
+| `motor.jpg` | Práce v motorovém prostoru | 3279 |
+| `ponk.jpg` | Nářadí na stěně nad ponkem | 3248 |
+| `budova.jpg` | Budova dílny zvenku, čelní pohled na vrata | 3243 |
 
 ## Sekce „Dílnu jsme si postavili sami"
 
 | Soubor | Co nafotit |
 |---|---|
-| `prezouvaci-stroj.jpg` | Přezouvací stroj s kolem, ruce mechanika v rukavicích, jedno boční světlo (4:3) |
+| `dilna.mp4` | Smyčka průjezdu kolem budovy (IMG_3239), tam a zpět, 1280 × 720. Jen na tabletu a větším. |
+| `dilna.jpg` | První snímek z videa. Na mobilu je jediný, jinde je vidět, než se video načte. |
 
 ## Na co si dát pozor
 

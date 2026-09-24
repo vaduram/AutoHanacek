@@ -14,7 +14,13 @@ import { specializace } from '../data/site';
 			{
 				specializace.karty.map((k) => (
 					<li data-rv>
-						<PhotoSlot soubor={k.foto.soubor} popis={k.foto.popis} pomer={k.foto.pomer} alt={`${k.nazev} — ${k.foto.popis}`} />
+						<PhotoSlot
+							soubor={k.foto.soubor}
+							video={k.foto.video}
+							popis={k.foto.popis}
+							pomer={k.foto.pomer}
+							alt={`${k.nazev} — ${k.foto.popis}`}
+						/>
 						<div class="spec__text">
 							<h3>{k.nazev}</h3>
 							<p>{k.text}</p>

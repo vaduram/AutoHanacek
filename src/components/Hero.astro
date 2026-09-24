@@ -14,21 +14,24 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 <header class="hero" id="prezuti">
 	<div class="hero__bg" aria-hidden="true">
 		{
-			maVideo && (
-				<video
-					class="hero__video"
-					autoplay
-					muted
-					loop
-					playsinline
-					preload="metadata"
-					poster={maPoster ? verejne('media/hero-poster.jpg') : undefined}
-				>
-					<source src={verejne('media/hero.mp4')} type="video/mp4" />
-				</video>
+			(maPoster || maVideo) && (
+				<div class="hero__media">
+					{maPoster && <img src={verejne('media/hero-poster.jpg')} alt="" />}
+					{maVideo && (
+						<video
+							class="hero__smycka"
+							data-smycka={verejne('media/hero.mp4')}
+							muted
+							loop
+							playsinline
+							disablepictureinpicture
+							preload="none"
+							tabindex="-1"
+						/>
+					)}
+				</div>
 			)
 		}
-		{maPoster && !maVideo && <img class="hero__video" src={verejne('media/hero-poster.jpg')} alt="" />}
 		<div class="hero__streak hero__streak--wide"></div>
 		<div class="hero__streak hero__streak--thin"></div>
 		<div class="hero__grain"></div>
@@ -172,14 +175,30 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 			linear-gradient(140deg, #2b3238 0%, #191d22 46%, #0c0e11 100%);
 	}
 
-	.hero__video {
+	/* ztmavení a odbarvení nese obal, ať se poster a video nesčítají do světlejšího */
+	.hero__media {
+		position: absolute;
+		inset: 0;
+		opacity: 0.52;
+		filter: grayscale(0.45) contrast(1.05) brightness(0.62);
+	}
+
+	.hero__media > img,
+	.hero__media > video {
 		position: absolute;
 		inset: 0;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		opacity: 0.52;
-		filter: grayscale(0.45) contrast(1.05) brightness(0.62);
+	}
+
+	.hero__smycka {
+		opacity: 0;
+		transition: opacity 0.8s ease;
+	}
+
+	.hero__smycka.is-hraje {
+		opacity: 1;
 	}
 
 	/* světlo z vrat dílny */
