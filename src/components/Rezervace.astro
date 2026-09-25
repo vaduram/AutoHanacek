@@ -34,7 +34,7 @@ import { firma, rezervace } from '../data/site';
 				</p>
 			</div>
 
-			<a href={rezervace.url} class="btn btn--acc rez__cta" data-rezervace-otevrit>
+			<a href={rezervace.url} class="btn rez__cta" data-rezervace-otevrit>
 				<span class="sweep" aria-hidden="true"></span>
 				<span>Otevřít kalendář</span>
 			</a>
@@ -70,35 +70,63 @@ import { firma, rezervace } from '../data/site';
 </dialog>
 
 <style>
+	/* jediný modrý panel na stránce, ať se objednání nedá přehlédnout */
 	.rez__vyzva {
+		position: relative;
+		overflow: hidden;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: clamp(24px, 4vw, 48px);
 		flex-wrap: wrap;
-		border: 1px solid var(--line);
-		background: var(--srf);
-		padding: clamp(24px, 3.5vw, 40px);
+		background: linear-gradient(120deg, #1e88e0 0%, #1a7cd0 60%, #166cb8 100%);
+		color: var(--accink);
+		padding: clamp(28px, 4vw, 48px);
+	}
+
+	/* světlo z vrat jako v hero */
+	.rez__vyzva::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 14%;
+		width: 300px;
+		height: 100%;
+		transform: skewX(-14deg);
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+		pointer-events: none;
+	}
+
+	.rez__vyzva > * {
+		position: relative;
 	}
 
 	.rez__perex {
 		max-width: 46ch;
-		font-size: clamp(16px, 1.4vw, 18px);
-		line-height: 1.7;
-		color: var(--ink);
+		font-weight: 500;
+		font-size: clamp(17px, 1.5vw, 20px);
+		line-height: 1.6;
+		color: var(--accink);
 	}
 
 	.rez__tel {
 		margin-top: 12px;
-		max-width: 46ch;
+		max-width: 50ch;
 		font-size: 14px;
 		line-height: 1.7;
-		color: var(--grey);
+		color: rgba(6, 19, 29, 0.75);
+	}
+
+	.rez__tel a {
+		color: var(--accink);
+		font-weight: 700;
 	}
 
 	.rez__cta {
 		flex: none;
 		padding: 22px 36px;
+		background: #0e1216;
+		color: var(--hero-ink);
 	}
 
 	/* ---- modál ---- */

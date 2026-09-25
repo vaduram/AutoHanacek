@@ -360,6 +360,7 @@ export const cenik = {
 			'konzultace při koupi vozu',
 		],
 		poznamka: 'naceníme telefonicky',
+		poznamkaMobil: 'telefonicky',
 	},
 };
 

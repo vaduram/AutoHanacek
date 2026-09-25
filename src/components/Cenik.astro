@@ -23,14 +23,16 @@ import { cenik, firma } from '../data/site';
 					</article>
 				))
 			}
-		</div>
 
-		<div class="cenik__dale" data-rv>
-			<h3 class="cenik__dale-nadpis">{cenik.dale.nadpis}</h3>
-			<ul>{cenik.dale.polozky.map((p) => <li>{p}</li>)}</ul>
-			<a href={firma.telefonHref} class="cenik__dale-tel">
-				{cenik.dale.poznamka} · <strong>{firma.telefonZobrazit}</strong>
-			</a>
+			<article class="cenik__radek cenik__radek--dale" data-rv>
+				<span class="cenik__cislo">+</span>
+				<h3 class="cenik__nazev">{cenik.dale.nadpis}</h3>
+				<ul class="cenik__popis cenik__stitky">{cenik.dale.polozky.map((p) => <li>{p}</li>)}</ul>
+				<a href={firma.telefonHref} class="cenik__cena cenik__cena--tlum cenik__tel">
+					<span class="only-desktop">{cenik.dale.poznamka}</span>
+					<span class="only-mobile">{cenik.dale.poznamkaMobil}</span>
+				</a>
+			</article>
 		</div>
 	</div>
 </section>
@@ -102,60 +104,32 @@ import { cenik, firma } from '../data/site';
 		color: var(--mut);
 	}
 
-	.cenik__dale {
-		display: grid;
-		grid-template-columns: auto minmax(0, 1fr) auto;
+	.cenik__radek--dale {
 		align-items: center;
-		gap: 16px 28px;
-		margin-top: 28px;
-		padding: 22px 24px;
-		background: var(--srf);
-		border: 1px solid var(--line);
-		border-left: 3px solid var(--acc);
 	}
 
-	.cenik__dale-nadpis {
-		font-family: var(--font-display);
-		font-weight: 700;
-		font-size: 22px;
-		line-height: 1;
-		text-transform: uppercase;
-		color: var(--ink);
-		white-space: nowrap;
-	}
-
-	.cenik__dale ul {
+	.cenik__stitky {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 8px;
 		margin: 0;
-		padding: 0;
 		list-style: none;
 	}
 
-	.cenik__dale li {
-		font-weight: 500;
+	.cenik__stitky li {
 		font-size: 14px;
 		line-height: 1.3;
-		padding: 9px 13px;
+		padding: 8px 12px;
 		border: 1px solid var(--line);
-		background: var(--bg);
 		color: var(--ink);
 	}
 
-	.cenik__dale-tel {
-		font-family: var(--font-mono);
-		font-size: 13px;
-		color: var(--mut);
+	.cenik__tel {
 		text-decoration: none;
-		white-space: nowrap;
+		transition: color 0.3s;
 	}
 
-	.cenik__dale-tel strong {
-		color: var(--ink);
-	}
-
-	.cenik__dale-tel:hover strong {
+	.cenik__tel:hover {
 		color: var(--acc);
 	}
 
@@ -189,12 +163,6 @@ import { cenik, firma } from '../data/site';
 
 		.cenik__radek > * {
 			padding-block: 18px;
-		}
-
-		.cenik__dale {
-			grid-template-columns: minmax(0, 1fr);
-			gap: 14px;
-			padding: 18px;
 		}
 	}
 
