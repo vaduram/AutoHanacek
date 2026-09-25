@@ -1,0 +1,537 @@
+---
+import PhotoSlot from './PhotoSlot.astro';
+import { verejne } from '../lib/cesta';
+import { firma, kdeJsme, oteviraciDoba } from '../data/site';
+
+const [vsedni, ...ostatni] = oteviraciDoba;
+const { mapa, majitel, hodiny } = kdeJsme;
+---
+
+<section class="kde" id="kde-jsme" aria-labelledby="kde-nadpis">
+	<div class="kde__mapa" style={`--mapa-w:${mapa.sirka}px;--mapa-h:${mapa.vyska}px`}>
+		<img src={verejne(`media/${mapa.soubor}`)} alt="" width={mapa.sirka} height={mapa.vyska} loading="lazy" decoding="async" />
+		<span class="kde__kruh kde__kruh--puls" aria-hidden="true"></span>
+		<span class="kde__kruh" aria-hidden="true"></span>
+		<svg class="kde__pin" width="52" height="52" viewBox="0 0 24 24" aria-hidden="true">
+			<path d="M12 22s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12z" fill="currentColor"></path>
+			<circle cx="12" cy="10" r="2.6" fill="#06131d"></circle>
+		</svg>
+		<a class="kde__atribuce" href={mapa.atribuceUrl} target="_blank" rel="noopener">{mapa.atribuce}</a>
+	</div>
+
+	<div class="wrap kde__obsah">
+		<div class="kde__adresa">
+			<div class="eyebrow" data-rvc>
+				<i></i><span>{kdeJsme.stitek}</span>
+			</div>
+			<h2 class="h2 kde__h2" id="kde-nadpis" data-rvc>{firma.ulice}</h2>
+			<p class="kde__mesto" data-rvc>{firma.psc} {firma.mesto} · {kdeJsme.doplnek}</p>
+			<ul class="kde__odkazy" data-rvc>
+				{
+					kdeJsme.odkazy.map((o) => (
+						<li>
+							<a href={o.href} target="_blank" rel="noopener">
+								{o.text}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+
+		<aside class="kde__panel kde__hodiny" data-rvc aria-labelledby="kde-hodiny-nadpis">
+			<div class="kde__hlava">
+				<h3 id="kde-hodiny-nadpis">{hodiny.nadpis}</h3>
+				<p class="kde__stav" data-stav={JSON.stringify(oteviraciDoba)} hidden>
+					<i></i><span></span>
+				</p>
+			</div>
+			<p class="kde__den">{vsedni.den}</p>
+			<p class="kde__cas">{vsedni.cas}</p>
+			<dl class="kde__dny">
+				{
+					ostatni.map((d) => (
+						<div>
+							<dt>{d.den}</dt>
+							<dd>{d.cas}</dd>
+						</div>
+					))
+				}
+			</dl>
+			<p class="kde__odtah">
+				<span>{hodiny.odtah}</span>
+				<strong>{hodiny.odtahCas}</strong>
+			</p>
+			<a href={firma.telefonHref} class="btn btn--acc kde__cta">
+				<span class="sweep" aria-hidden="true"></span>
+				<span>{hodiny.cta}</span>
+			</a>
+		</aside>
+
+		<div class="kde__panel kde__majitel" data-rvc>
+			<PhotoSlot soubor={majitel.foto.soubor} popis={majitel.foto.popis} pomer="4 / 5" class="kde__foto" />
+			<div>
+				<p class="kde__role">{majitel.stitek}</p>
+				<h3 class="kde__jmeno">{majitel.jmeno}</h3>
+				{majitel.medailon && <p class="kde__medailon">{majitel.medailon}</p>}
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	type Den = { den: string; cas: string; dny: number[]; otevira?: number; zavira?: number };
+
+	const DNY_V = ['neděli', 'pondělí', 'úterý', 'středu', 'čtvrtek', 'pátek', 'sobotu'];
+
+	const stav = document.querySelector<HTMLElement>('[data-stav]');
+	if (stav) {
+		const rozpis: Den[] = JSON.parse(stav.dataset.stav!);
+		const casti = new Intl.DateTimeFormat('en-GB', {
+			timeZone: 'Europe/Prague',
+			weekday: 'short',
+			hour: 'numeric',
+			minute: 'numeric',
+			hourCycle: 'h23',
+		}).formatToParts(new Date());
+		const cast = (typ: string) => casti.find((p) => p.type === typ)?.value ?? '';
+		const den = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(cast('weekday'));
+		const hodina = Number(cast('hour')) + Number(cast('minute')) / 60;
+		const pro = (d: number) => rozpis.find((r) => r.dny.includes(d));
+		const dnes = pro(den);
+
+		let text = '';
+		let otevreno = false;
+		if (dnes?.otevira !== undefined && dnes.zavira !== undefined && hodina >= dnes.otevira && hodina < dnes.zavira) {
+			otevreno = true;
+			text = `Teď otevřeno · do ${dnes.zavira}:00`;
+		} else if (dnes?.otevira !== undefined && hodina < dnes.otevira) {
+			text = `Zavřeno · otevíráme v ${dnes.otevira}:00`;
+		} else if (dnes && dnes.otevira === undefined && dnes.cas !== 'zavřeno') {
+			text = `Dnes ${dnes.cas}`;
+		} else {
+			for (let i = 1; i <= 7; i++) {
+				const d = (den + i) % 7;
+				const p = pro(d);
+				if (p?.otevira === undefined) continue;
+				text = `Zavřeno · otevíráme ${i === 1 ? 'zítra' : `v ${DNY_V[d]}`} v ${p.otevira}:00`;
+				break;
+			}
+		}
+
+		if (den >= 0 && text) {
+			stav.querySelector('span')!.textContent = text;
+			stav.classList.toggle('is-otevreno', otevreno);
+			stav.hidden = false;
+		}
+	}
+</script>
+
+<style>
+	.kde {
+		position: relative;
+		overflow: hidden;
+		min-height: 860px;
+		display: flex;
+		background: #14171a;
+		color: var(--hero-ink);
+		border-bottom: 1px solid var(--line);
+	}
+
+	/* ---- mapa ---- */
+
+	/* Obrázek se neškáluje: provozovna (střed obrázku) leží vždy přesně pod pinem. */
+	.kde__mapa {
+		--pin-x: calc(50% + 50px);
+		--pin-y: 52%;
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+	}
+
+	.kde__mapa img {
+		position: absolute;
+		left: calc(var(--pin-x) - var(--mapa-w) / 2);
+		top: calc(var(--pin-y) - var(--mapa-h) / 2);
+		width: var(--mapa-w);
+		height: var(--mapa-h);
+		max-width: none;
+	}
+
+	.kde__mapa::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			90deg,
+			rgba(9, 11, 13, 0.9) 0%,
+			rgba(9, 11, 13, 0.45) 42%,
+			rgba(9, 11, 13, 0.15) 58%,
+			rgba(9, 11, 13, 0.7) 100%
+		);
+		pointer-events: none;
+	}
+
+	.kde__kruh,
+	.kde__pin {
+		position: absolute;
+		z-index: 1;
+		left: var(--pin-x);
+		top: var(--pin-y);
+	}
+
+	.kde__kruh {
+		width: 88px;
+		height: 88px;
+		border-radius: 50%;
+		border: 1px solid rgba(30, 136, 224, 0.55);
+		transform: translate(-50%, -50%);
+	}
+
+	.kde__kruh--puls {
+		width: 160px;
+		height: 160px;
+		border-color: rgba(30, 136, 224, 0.35);
+		animation: kdePuls 3.2s ease-out infinite;
+	}
+
+	.kde__pin {
+		color: var(--acc);
+		transform: translate(-50%, -92%);
+		filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+	}
+
+	.kde__atribuce {
+		position: absolute;
+		z-index: 1;
+		right: 12px;
+		bottom: 10px;
+		font-family: var(--font-mono);
+		font-size: 10px;
+		letter-spacing: 0.06em;
+		color: var(--hero-dim);
+		text-decoration: none;
+	}
+
+	.kde__atribuce:hover {
+		color: var(--hero-ink);
+	}
+
+	@keyframes kdePuls {
+		from {
+			transform: translate(-50%, -50%) scale(0.55);
+			opacity: 1;
+		}
+		to {
+			transform: translate(-50%, -50%) scale(1.35);
+			opacity: 0;
+		}
+	}
+
+	/* ---- rozložení ---- */
+
+	.kde__obsah {
+		position: relative;
+		width: 100%;
+		display: grid;
+		grid-template-columns: 560px minmax(0, 1fr) 460px;
+		grid-template-rows: auto 1fr;
+		grid-template-areas:
+			'adresa . hodiny'
+			'majitel . hodiny';
+		row-gap: 40px;
+		padding-block: 80px 72px;
+	}
+
+	.kde__adresa {
+		grid-area: adresa;
+	}
+
+	.kde__hodiny {
+		grid-area: hodiny;
+		align-self: start;
+	}
+
+	.kde__majitel {
+		grid-area: majitel;
+		align-self: end;
+	}
+
+	/* ---- adresa ---- */
+
+	.kde__h2 {
+		margin-top: 22px;
+		color: var(--hero-ink);
+	}
+
+	.kde__mesto {
+		margin-top: 12px;
+		font-size: 18px;
+		color: var(--hero-mut);
+	}
+
+	.kde__odkazy {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin: 24px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.kde__odkazy a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		padding: 0 14px;
+		border: 1px solid var(--hero-line);
+		background: rgba(9, 11, 13, 0.35);
+		color: var(--hero-ink);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 13px;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		text-decoration: none;
+		transition: border-color 0.3s;
+	}
+
+	.kde__odkazy a:hover {
+		border-color: var(--acc);
+	}
+
+	/* ---- panely ---- */
+
+	.kde__panel {
+		background: rgba(255, 255, 255, 0.055);
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		backdrop-filter: blur(18px);
+		box-shadow: 0 40px 90px rgba(0, 0, 0, 0.5);
+	}
+
+	.kde__hodiny {
+		padding: 30px 30px 32px;
+	}
+
+	.kde__hlava {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+	}
+
+	.kde__hlava h3 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 30px;
+		line-height: 1;
+		text-transform: uppercase;
+		color: var(--hero-ink);
+	}
+
+	.kde__stav {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 11px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--hero-mut);
+	}
+
+	.kde__stav[hidden] {
+		display: none;
+	}
+
+	.kde__stav i {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--hero-dim);
+	}
+
+	.kde__stav.is-otevreno {
+		color: var(--hero-ink);
+	}
+
+	.kde__stav.is-otevreno i {
+		background: var(--acc);
+		box-shadow: 0 0 10px var(--acc);
+	}
+
+	.kde__den {
+		margin-top: 26px;
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 11px;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--hero-dim);
+	}
+
+	.kde__cas {
+		margin-top: 6px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: clamp(52px, 5vw, 72px);
+		line-height: 0.95;
+		white-space: nowrap;
+		color: var(--hero-ink);
+	}
+
+	.kde__dny {
+		margin: 22px 0 0;
+	}
+
+	.kde__dny div {
+		display: flex;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 12px 0;
+		border-top: 1px solid var(--hero-line);
+		font-size: 15px;
+		color: var(--hero-mut);
+	}
+
+	.kde__dny div:last-child {
+		border-bottom: 1px solid var(--hero-line);
+	}
+
+	.kde__dny dd {
+		margin: 0;
+		font-family: var(--font-mono);
+	}
+
+	.kde__odtah {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		margin-top: 18px;
+		padding: 14px 16px;
+		background: rgba(30, 136, 224, 0.14);
+		border: 1px solid rgba(30, 136, 224, 0.4);
+	}
+
+	.kde__odtah span {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 18px;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--hero-ink);
+	}
+
+	.kde__odtah strong {
+		font-family: var(--font-mono);
+		font-weight: 600;
+		font-size: 16px;
+		color: var(--acc);
+	}
+
+	.kde__cta {
+		width: 100%;
+		margin-top: 18px;
+		font-size: 15px;
+	}
+
+	.kde__majitel {
+		display: grid;
+		grid-template-columns: 156px minmax(0, 1fr);
+		gap: 24px;
+		align-items: center;
+		padding: 22px;
+	}
+
+	.kde__role {
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 11px;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--acc);
+	}
+
+	.kde__jmeno {
+		margin-top: 8px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 34px;
+		line-height: 1;
+		text-transform: uppercase;
+		color: var(--hero-ink);
+	}
+
+	.kde__medailon {
+		margin-top: 12px;
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--hero-mut);
+	}
+
+	/* ---- užší obrazovky: mapa jako pás nahoře, obsah pod ní ---- */
+
+	@media (max-width: 1339px) {
+		.kde {
+			display: block;
+			min-height: 0;
+		}
+
+		.kde__mapa {
+			--pin-x: 50%;
+			--pin-y: 50%;
+			position: relative;
+			height: clamp(260px, 42vw, 420px);
+		}
+
+		.kde__mapa::after {
+			background: linear-gradient(180deg, rgba(9, 11, 13, 0.2) 0%, rgba(9, 11, 13, 0.35) 60%, #14171a 100%);
+		}
+
+		.kde__obsah {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-rows: none;
+			grid-template-areas:
+				'adresa adresa'
+				'hodiny majitel';
+			gap: 24px;
+			padding-block: 8px 56px;
+		}
+
+		.kde__majitel {
+			align-self: start;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.kde__obsah {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-areas:
+				'adresa'
+				'hodiny'
+				'majitel';
+			gap: 20px;
+		}
+
+		.kde__mesto {
+			font-size: 16px;
+		}
+
+		.kde__hodiny {
+			padding: 22px 20px 24px;
+		}
+
+		.kde__majitel {
+			grid-template-columns: 116px minmax(0, 1fr);
+			gap: 18px;
+			padding: 16px;
+		}
+
+		.kde__jmeno {
+			font-size: 28px;
+		}
+	}
+</style>

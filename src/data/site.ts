@@ -18,14 +18,20 @@ export const firma = {
 	zalozeno: 2006,
 	vlastniDilnaOd: 2015,
 	spadovaOblast: ['Moravský Písek', 'Bzenec', 'Veselí nad Moravou'],
-	// Souřadnice provozovny – doplnit přesně podle mapy, než se nasadí mapa a JSON-LD.
-	geo: { lat: null as number | null, lng: null as number | null },
+	// Budova „Auto-Pneu-Servis Hanáček" v OpenStreetMap (way 688578217), ověřeno 25. 9. 2026.
+	geo: { lat: 48.9826231, lng: 17.3248234 },
 };
 
+/**
+ * `dny` jsou čísla dnů podle Date.getDay() (0 = neděle), `otevira` a `zavira` celé
+ * hodiny pražského času. Z nich web počítá stav „Teď otevřeno" — svátky nezná.
+ */
+const vsedni = { otevira: 7, zavira: 16 };
+
 export const oteviraciDoba = [
-	{ den: 'Pondělí–Pátek', cas: '7:00–16:00' },
-	{ den: 'Sobota', cas: 'dle objednání' },
-	{ den: 'Neděle', cas: 'zavřeno' },
+	{ den: 'Pondělí–pátek', cas: `${vsedni.otevira}:00–${vsedni.zavira}:00`, dny: [1, 2, 3, 4, 5], ...vsedni },
+	{ den: 'Sobota', cas: 'dle objednání', dny: [6] },
+	{ den: 'Neděle', cas: 'zavřeno', dny: [0] },
 ];
 
 /** Externí rezervační kalendář SmartServis (PneuB2B). */
@@ -112,10 +118,12 @@ export const hero = {
 	 * než „5 000". A hodnota s rokem („od 2006") je ověřitelná, tedy bezpečná.
 	 */
 	cisla: [
-		{ hodnota: '2006', dopocitat: 2006, popis: 'v provozu od' },
-		{ hodnota: '24/7', dopocitat: null, popis: 'odtah nonstop' },
 		{ hodnota: '[?]', dopocitat: null, popis: 'opravených vozů' },
 		{ hodnota: '[?]', dopocitat: null, popis: 'spokojených zákazníků' },
+		// místo, kam se v pásu vloží `hodnoceni` níže
+		'hodnoceni' as const,
+		{ hodnota: '2006', dopocitat: 2006, popis: 'v provozu od' },
+		{ hodnota: '24/7', dopocitat: null, popis: 'odtah nonstop' },
 	],
 
 	/**
@@ -250,9 +258,26 @@ export const galerie = {
 export const dilna = {
 	stitek: `Vlastní dílna od ${firma.vlastniDilnaOd}`,
 	nadpis: ['Dílnu jsme si', 'postavili sami'],
+	/** Fakta podle stránky Historie firmy na starém webu hanacekauto.cz. */
+	perex:
+		'Servis vede Vlastimil Hanáček. Začínali jsme v roce 2006 v pronajaté dílně — ' +
+		'a když přestala stačit, postavili jsme si vlastní.',
+	milniky: [
+		{ rok: '2006', nazev: 'První dílna', text: 'Začínáme v pronajatých prostorách.' },
+		{
+			rok: '2013',
+			nazev: 'Plná kapacita',
+			text: 'Stálých zákazníků přibývá, na další auta ani nové přístroje už není místo.',
+		},
+		{
+			rok: '2015',
+			nazev: 'Vlastní hala',
+			text: 'V září je hotovo — dílna se zázemím pro vybavení a parkováním pro zákazníky.',
+		},
+	],
 	odstavce: [
-		'Servis vede Vlastimil Hanáček. Od roku 2006 v pronajatých prostorách, od září 2015 ' +
-			've vlastní hale — postavili jsme ji, protože kapacita přestala stačit.',
+		'Díky vlastní hale jsme mohli rozšířit služby a ceny přitom zůstaly tam, ' +
+			'kde je naši zákazníci znají.',
 		'Jezdí k nám z Moravského Písku, Bzence a Veselí nad Moravou.',
 	],
 	foto: {
@@ -325,9 +350,17 @@ export const cenik = {
 			zvyraznit: false,
 		},
 	],
-	dale:
-		'Dále: chiptuning · karosářské a lakýrnické práce · svařování plastů · ' +
-		'opravy po havárii · konzultace při koupi vozu',
+	dale: {
+		nadpis: 'Dále děláme',
+		polozky: [
+			'chiptuning',
+			'karosářské a lakýrnické práce',
+			'svařování plastů',
+			'opravy po havárii',
+			'konzultace při koupi vozu',
+		],
+		poznamka: 'naceníme telefonicky',
+	},
 };
 
 export const ctaPas = {
@@ -339,11 +372,48 @@ export const ctaPas = {
 	sekundarni: `Ostatní servis: ${firma.telefonZobrazit}`,
 };
 
+export const kdeJsme = {
+	stitek: 'Kde nás najdete',
+	doplnek: 'parkování u dílny',
+	mapa: {
+		/** Tmavě přebarvené dlaždice OSM; provozovna je přesně uprostřed obrázku. */
+		soubor: 'mapa.jpg',
+		sirka: 2800,
+		vyska: 1200,
+		atribuce: '© OpenStreetMap',
+		atribuceUrl: 'https://www.openstreetmap.org/copyright',
+	},
+	odkazy: [
+		{
+			text: 'Mapy.cz',
+			href: `https://mapy.com/fnc/v1/showmap?center=${firma.geo.lng},${firma.geo.lat}&zoom=17&marker=true`,
+		},
+		{
+			text: 'Google Maps',
+			href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${firma.znacka}, ${firma.ulice}, ${firma.mesto}`)}`,
+		},
+		{ text: 'Waze', href: `https://waze.com/ul?ll=${firma.geo.lat},${firma.geo.lng}&navigate=yes` },
+	],
+	hodiny: {
+		nadpis: 'Otevírací doba',
+		odtah: 'Odtah nonstop',
+		odtahCas: '24/7',
+		cta: `Zavolat ${firma.telefonZobrazit}`,
+	},
+	majitel: {
+		stitek: 'Majitel servisu',
+		jmeno: 'Vlastimil Hanáček',
+		/** Pár vět doplní majitel. Dokud je null, karta ukáže jen fotku a jméno. */
+		medailon: null as string | null,
+		foto: { soubor: 'majitel.jpg', popis: 'Vlastimil Hanáček, majitel servisu, v dílně' },
+	},
+};
+
 export const navigace = [
 	{ text: 'Přezutí', href: '#rezervace' },
 	{ text: 'Služby', href: '#ceny' },
 	{ text: 'Dílna', href: '#dilna' },
-	{ text: 'Kontakt', href: '#kontakt' },
+	{ text: 'Kontakt', href: '#kde-jsme' },
 ];
 
 export const seo = {

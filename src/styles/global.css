@@ -321,7 +321,8 @@ a {
 	[data-rv] {
 		opacity: 1 !important;
 	}
-	.progress {
+	.progress,
+	.btn .sweep {
 		display: none;
 	}
 }

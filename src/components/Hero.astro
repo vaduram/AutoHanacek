@@ -80,44 +80,46 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 
 			<dl class="hero__cisla" data-rvc>
 				{
-					hero.cisla.map((c) => (
-						<div class:list={[c.hodnota.startsWith('[') && 'is-nevyplneno']}>
-							<dd data-count={c.dopocitat ?? undefined}>{c.hodnota}</dd>
-							<dt>{c.popis}</dt>
-						</div>
-					))
+					hero.cisla.map((c) =>
+						c === 'hodnoceni' ? (
+							<div class="hero__hodnoceni">
+								<dd>
+									<span class="hero__hvezdy" aria-hidden="true">
+										{
+											[0, 1, 2, 3, 4].map(() => (
+												<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+													<path d="M12 2.4l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.2l6.5-.9z" />
+												</svg>
+											))
+										}
+									</span>
+									{hero.hodnoceni.znamka}
+									<span class="hero__z-peti">/ {hero.hodnoceni.maximum}</span>
+								</dd>
+								<dt>
+									{
+										hero.hodnoceni.url ? (
+											<a href={hero.hodnoceni.url} target="_blank" rel="noopener">
+												hodnocení na {hero.hodnoceni.zdroj}
+												{hero.hodnoceni.pocet && ` · ${hero.hodnoceni.pocet}×`}
+											</a>
+										) : (
+											<>
+												hodnocení na {hero.hodnoceni.zdroj}
+												{hero.hodnoceni.pocet && ` · ${hero.hodnoceni.pocet}×`}
+											</>
+										)
+									}
+								</dt>
+							</div>
+						) : (
+							<div class:list={[c.hodnota.startsWith('[') && 'is-nevyplneno']}>
+								<dd data-count={c.dopocitat ?? undefined}>{c.hodnota}</dd>
+								<dt>{c.popis}</dt>
+							</div>
+						),
+					)
 				}
-
-				<div class="hero__hodnoceni">
-					<dd>
-						<span class="hero__hvezdy" aria-hidden="true">
-							{
-								[0, 1, 2, 3, 4].map(() => (
-									<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-										<path d="M12 2.4l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.2l6.5-.9z" />
-									</svg>
-								))
-							}
-						</span>
-						{hero.hodnoceni.znamka}
-						<span class="hero__z-peti">/ {hero.hodnoceni.maximum}</span>
-					</dd>
-					<dt>
-						{
-							hero.hodnoceni.url ? (
-								<a href={hero.hodnoceni.url} target="_blank" rel="noopener">
-									hodnocení na {hero.hodnoceni.zdroj}
-									{hero.hodnoceni.pocet && ` · ${hero.hodnoceni.pocet}×`}
-								</a>
-							) : (
-								<>
-									hodnocení na {hero.hodnoceni.zdroj}
-									{hero.hodnoceni.pocet && ` · ${hero.hodnoceni.pocet}×`}
-								</>
-							)
-						}
-					</dt>
-				</div>
 			</dl>
 		</div>
 
@@ -492,7 +494,7 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 	.booking__head h2 {
 		font-family: var(--font-display);
 		font-weight: 700;
-		font-size: 27px;
+		font-size: 30px;
 		line-height: 1;
 		letter-spacing: 0.02em;
 		text-transform: uppercase;
@@ -501,7 +503,7 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 
 	.booking__src {
 		font-family: var(--font-mono);
-		font-size: 9px;
+		font-size: 11px;
 		line-height: 1.4;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
@@ -512,9 +514,9 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 
 	.booking__popis {
 		margin-bottom: 22px;
-		font-size: 13px;
+		font-size: 15px;
 		line-height: 1.55;
-		color: rgba(239, 233, 223, 0.6);
+		color: rgba(239, 233, 223, 0.72);
 	}
 
 	.booking__kroky {
@@ -542,8 +544,8 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 
 	.booking__kroky li span {
 		flex: none;
-		width: 24px;
-		height: 24px;
+		width: 26px;
+		height: 26px;
 		border-radius: 50%;
 		display: grid;
 		place-items: center;
@@ -551,7 +553,7 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 		color: rgba(239, 233, 223, 0.6);
 		font-family: var(--font-mono);
 		font-weight: 700;
-		font-size: 11px;
+		font-size: 12px;
 	}
 
 	.booking__kroky li.is-on span {
@@ -572,11 +574,11 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 	}
 
 	.booking__label {
-		color: rgba(239, 233, 223, 0.5);
+		color: rgba(239, 233, 223, 0.62);
 		margin-bottom: 9px;
 		font-family: var(--font-body);
 		font-weight: 600;
-		font-size: 10px;
+		font-size: 12px;
 		letter-spacing: 0.18em;
 	}
 
@@ -590,10 +592,11 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 	}
 
 	.booking__ukony li {
+		flex: 1 1 auto;
 		font-weight: 500;
-		font-size: 12px;
+		font-size: 14px;
 		line-height: 1.3;
-		padding: 11px 13px;
+		padding: 12px 14px;
 		border: 1px solid rgba(255, 255, 255, 0.18);
 		color: rgba(239, 233, 223, 0.7);
 	}
@@ -613,14 +616,14 @@ const maPoster = fs.existsSync(media('hero-poster.jpg'));
 	.booking__cta {
 		width: 100%;
 		padding: 18px;
-		font-size: 13px;
+		font-size: 15px;
 	}
 
 	.booking__tel {
 		margin-top: 14px;
-		font-size: 12px;
+		font-size: 14px;
 		line-height: 1.55;
-		color: rgba(239, 233, 223, 0.5);
+		color: rgba(239, 233, 223, 0.62);
 	}
 
 	.booking__tel :global(a) {

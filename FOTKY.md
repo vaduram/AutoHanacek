@@ -55,6 +55,13 @@ Web je ořezává na střed podle velikosti dlaždice, proto stačí 16:9 nebo 3
 | `dilna.mp4` | Smyčka průjezdu kolem budovy (IMG_3239), tam a zpět, 1280 × 720. Jen na tabletu a větším. |
 | `dilna.jpg` | První snímek z videa. Na mobilu je jediný, jinde je vidět, než se video načte. |
 
+## Sekce „Kde nás najdete"
+
+| Soubor | Co to je |
+|---|---|
+| `majitel.jpg` | Portrét pana Hanáčka (IMG_3313), ořez 4:5, 720 × 900. |
+| `mapa.jpg` | Tmavě přebarvené dlaždice OpenStreetMap, zoom 17, 2800 × 1200. Provozovna musí být **přesně uprostřed** — web obrázek neškáluje a střed kreslí pod pin. Souřadnice jsou v `firma.geo`. Na webu musí zůstat odkaz „© OpenStreetMap". |
+
 ## Na co si dát pozor
 
 - **Fotit na šířku**, ne na výšku — web ořezává na střed.

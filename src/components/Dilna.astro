@@ -18,6 +18,20 @@ import { dilna } from '../data/site';
 			<i></i><span>{dilna.stitek}</span>
 		</div>
 		<h2 class="h2 split__h2" data-rvc>{dilna.nadpis[0]}<br />{dilna.nadpis[1]}</h2>
+		<p class="split__p split__p--perex" data-rvc>{dilna.perex}</p>
+
+		<ol class="split__milniky" data-rvc>
+			{
+				dilna.milniky.map((m) => (
+					<li>
+						<span class="split__rok">{m.rok}</span>
+						<strong>{m.nazev}</strong>
+						<span>{m.text}</span>
+					</li>
+				))
+			}
+		</ol>
+
 		{dilna.odstavce.map((o, i) => <p class:list={['split__p', i > 0 && 'split__p--tlum']} data-rvc>{o}</p>)}
 	</div>
 </section>
@@ -56,6 +70,67 @@ import { dilna } from '../data/site';
 
 	.split__p + .split__p {
 		margin-top: 16px;
+	}
+
+	.split__p--perex {
+		color: var(--ink);
+	}
+
+	.split__milniky {
+		max-width: 46ch;
+		margin: 30px 0;
+		padding: 0;
+		list-style: none;
+		border-left: 1px solid var(--line);
+	}
+
+	.split__milniky li {
+		position: relative;
+		display: grid;
+		grid-template-columns: 64px minmax(0, 1fr);
+		column-gap: 14px;
+		row-gap: 3px;
+		padding: 0 0 20px 22px;
+	}
+
+	.split__milniky li:last-child {
+		padding-bottom: 0;
+	}
+
+	/* bod na ose */
+	.split__milniky li::before {
+		content: '';
+		position: absolute;
+		left: -4px;
+		top: 8px;
+		width: 7px;
+		height: 7px;
+		background: var(--acc);
+	}
+
+	.split__rok {
+		grid-row: span 2;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 26px;
+		line-height: 1;
+		color: var(--acc);
+	}
+
+	.split__milniky strong {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 17px;
+		line-height: 1.2;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink);
+	}
+
+	.split__milniky li > span:last-child {
+		font-size: 15px;
+		line-height: 1.55;
+		color: var(--mut);
 	}
 
 	.split__p--tlum {

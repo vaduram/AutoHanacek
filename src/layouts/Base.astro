@@ -34,6 +34,7 @@ const jsonLd = {
 		addressLocality: firma.mesto,
 		addressCountry: 'CZ',
 	},
+	geo: { '@type': 'GeoCoordinates', latitude: firma.geo.lat, longitude: firma.geo.lng },
 	areaServed: firma.spadovaOblast,
 	foundingDate: String(firma.zalozeno),
 	openingHoursSpecification: [
@@ -63,7 +64,9 @@ const jsonLd = {
 		<meta property="og:locale" content="cs_CZ" />
 		<meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)" />
 		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-		<link rel="icon" href={verejne('favicon.svg')} type="image/svg+xml" />
+		<link rel="icon" href={verejne('favicon-32.png')} type="image/png" sizes="32x32" />
+		<link rel="icon" href={verejne('favicon-192.png')} type="image/png" sizes="192x192" />
+		<link rel="apple-touch-icon" href={verejne('apple-touch-icon.png')} />
 
 		{/* Téma se musí nastavit před vykreslením, jinak blikne. */}
 		<script is:inline>
