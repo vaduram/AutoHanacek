@@ -105,9 +105,9 @@ export const hero = {
 	perexMobil: 'Pneuservis, brzdy, klimatizace, turba, automaty, STK i odtah nonstop.',
 	sezonaStitek: 'Právě teď',
 	sezona:
-		'Sezóna přezutí — 4 kola i s vyvážením <strong>od 1 100 Kč</strong>. ' +
+		'Sezóna přezutí — 4 kola i s vyvážením <strong>od 1 100 Kč</strong>. ' +
 		'Pneuservis si objednáte online vpravo, ostatní práce telefonicky.',
-	sezonaMobil: 'Přezutí 4 kol s vyvážením <strong>od 1 100 Kč</strong>',
+	sezonaMobil: 'Přezutí 4 kol s vyvážením <strong>od 1 100 Kč</strong>',
 	/**
 	 * Čísla v hero pásu. Počty aut a zákazníků zadány 4. 10. 2026.
 	 *
@@ -116,8 +116,8 @@ export const hero = {
 	 * se v pásu zobrazí jako nevyplněná.
 	 */
 	cisla: [
-		{ hodnota: '15 000+', dopocitat: null, popis: 'opravených aut' },
-		{ hodnota: '8 000+', dopocitat: null, popis: 'spokojených zákazníků' },
+		{ hodnota: '15 000+', dopocitat: null, popis: 'opravených aut' },
+		{ hodnota: '8 000+', dopocitat: null, popis: 'spokojených zákazníků' },
 		// místo, kam se v pásu vloží `hodnoceni` níže
 		'hodnoceni' as const,
 		{ hodnota: '2006', dopocitat: 2006, popis: 'v provozu od' },
@@ -200,8 +200,8 @@ export const sezona = {
 		{
 			cislo: '04',
 			nazev: 'Uskladnění',
-			text: 'Druhou sadu necháte u nás. Od 500 Kč za sezónu, na jaře je připravená.',
-			textKratky: 'Od 500 Kč za sezónu.',
+			text: 'Druhou sadu necháte u nás. Od 500 Kč za sezónu, na jaře je připravená.',
+			textKratky: 'Od 500 Kč za sezónu.',
 		},
 	],
 };
@@ -212,27 +212,27 @@ export const specializace = {
 	karty: [
 		{
 			nazev: 'Turbodmychadla',
-			text: 'GARRETT, HOLSET, IHI, KKK, MITSUBISHI, SCHWITZER. Rozebrání a kontrola zdarma, oprava od 1 999 Kč.',
+			text: 'GARRETT, HOLSET, IHI, KKK, MITSUBISHI, SCHWITZER. Rozebrání a kontrola zdarma, oprava od 1 999 Kč.',
 			textKratky: 'GARRETT, HOLSET, IHI, KKK. Rozebrání a kontrola zdarma.',
-			foto: { soubor: 'turbo.jpg', video: 'turbo.mp4', popis: 'rozebrané turbo na ponku, detail kompresorového kola', pomer: '4 / 3' },
+			foto: { soubor: 'turbo.jpg', video: 'turbo.mp4', popis: 'opotřebované turbodmychadlo na ponku v dílně', pomer: '4 / 3' },
 		},
 		{
 			nazev: 'Olej v automatu',
-			text: 'Strojní proplach s filtrem. Bez plničky vyteče jen polovina náplně, zbytek zůstane v měniči a chladiči. Interval 60 000 km.',
-			textKratky: 'Strojní proplach s filtrem, interval 60 000 km.',
-			foto: { soubor: 'automat.jpg', video: 'automat.mp4', popis: 'strojní plnička připojená k automatu, hadice a průhledné trubice', pomer: '4 / 3' },
+			text: 'Strojní proplach s filtrem. Bez plničky vyteče jen polovina náplně, zbytek zůstane v měniči a chladiči. Interval 60 000 km.',
+			textKratky: 'Strojní proplach s filtrem, interval 60 000 km.',
+			foto: { soubor: 'automat.jpg', video: 'automat.mp4', popis: 'volič automatické převodovky s polohami P, R, N, D', pomer: '4 / 3' },
 		},
 		{
 			nazev: 'Klimatizace',
-			text: 'R134a i novější R1234yf, dezinfekce výparníku, ozonové čištění, pylový filtr. Diagnostika od 399 Kč.',
+			text: 'R134a i novější R1234yf, dezinfekce výparníku, ozonové čištění, pylový filtr. Diagnostika od 399 Kč.',
 			textKratky: 'R134a i R1234yf, dezinfekce, ozon, pylový filtr.',
-			foto: { soubor: 'klima.jpg', video: 'klima.mp4', popis: 'plnička klimatizace u otevřené kapoty, displej stanice', pomer: '4 / 3' },
+			foto: { soubor: 'klima.jpg', video: 'klima.mp4', popis: 'displej klimatizace v autě, nastaveno 23 °C', pomer: '4 / 3' },
 		},
 		{
 			nazev: 'Odtah NONSTOP',
-			text: 'Osobní i dodávková vozidla do 3,5 t, kdykoliv. Od 25 Kč/km.',
-			textKratky: 'Osobní i dodávková vozidla do 3,5 t. Od 25 Kč/km.',
-			foto: { soubor: 'odtah.jpg', video: 'odtah.mp4', popis: 'odtahový vůz s naloženým autem za tmy, modré světlo', pomer: '4 / 3' },
+			text: 'Osobní i dodávková vozidla do 3,5 t, kdykoliv. Od 25 Kč/km.',
+			textKratky: 'Osobní i dodávková vozidla do 3,5 t. Od 25 Kč/km.',
+			foto: { soubor: 'odtah.jpg', video: 'odtah.mp4', popis: 'modrý odtahový vůz Iveco s logem Hanáček Auto-Pneu-Servis', pomer: '4 / 3' },
 		},
 	],
 };
@@ -295,40 +295,40 @@ export const cenik = {
 			cislo: '01',
 			nazev: 'Autoservis',
 			popis: 'Brzdy, podvozek, tlumiče, ložiska, motory, převodovky, výfuky, vstřikovače Common Rail.',
-			cena: 'od 850 Kč/hod',
-			cenaMobil: 'od 850 Kč/h',
+			cena: 'od 850 Kč/hod',
+			cenaMobil: 'od 850 Kč/h',
 			zvyraznit: true,
 		},
 		{
 			cislo: '02',
 			nazev: 'Turbodmychadla',
 			popis: 'GARRETT, HOLSET, IHI, KKK, MITSUBISHI, SCHWITZER. Rozebrání a kontrola zdarma.',
-			cena: 'od 1 999 Kč',
-			cenaMobil: 'od 1 999 Kč',
+			cena: 'od 1 999 Kč',
+			cenaMobil: 'od 1 999 Kč',
 			zvyraznit: true,
 		},
 		{
 			cislo: '03',
 			nazev: 'Olej v automatu',
-			popis: 'Strojní plnička s proplachem. Bez ní vyteče jen polovina náplně — zbytek zůstane v měniči a chladiči. Interval 60 000 km.',
-			cena: '6 000–12 000 Kč',
+			popis: 'Strojní plnička s proplachem. Bez ní vyteče jen polovina náplně — zbytek zůstane v měniči a chladiči. Interval 60 000 km.',
+			cena: '6 000–12 000 Kč',
 			cenaMobil: '6–12 tis. Kč',
 			zvyraznit: true,
 		},
 		{
 			cislo: '04',
 			nazev: 'Klimatizace',
-			popis: 'R134a i novější R1234yf, dezinfekce výparníku, ozonové čištění, pylový filtr. Čištění od 499 Kč.',
-			cena: 'od 399 Kč',
-			cenaMobil: 'od 399 Kč',
+			popis: 'R134a i novější R1234yf, dezinfekce výparníku, ozonové čištění, pylový filtr. Čištění od 499 Kč.',
+			cena: 'od 399 Kč',
+			cenaMobil: 'od 399 Kč',
 			zvyraznit: true,
 		},
 		{
 			cislo: '05',
 			nazev: 'Diagnostika',
 			popis: 'Počítačová diagnostika systémy DELPHI, WOW, KTS.',
-			cena: 'od 400 Kč',
-			cenaMobil: 'od 400 Kč',
+			cena: 'od 400 Kč',
+			cenaMobil: 'od 400 Kč',
 			zvyraznit: true,
 		},
 		{
@@ -342,9 +342,9 @@ export const cenik = {
 		{
 			cislo: '07',
 			nazev: 'Odtah NONSTOP',
-			popis: 'Osobní i dodávková vozidla do 3,5 t. Voláte kdykoliv.',
-			cena: 'od 25 Kč/km',
-			cenaMobil: 'od 25 Kč/km',
+			popis: 'Osobní i dodávková vozidla do 3,5 t. Voláte kdykoliv.',
+			cena: 'od 25 Kč/km',
+			cenaMobil: 'od 25 Kč/km',
 			zvyraznit: true,
 		},
 		{

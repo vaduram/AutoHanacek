@@ -16,12 +16,19 @@ zůstane tmavý gradient se světelnými pruhy. Vypadá to dobře, ale je to sla
 
 ## Specializace (poměr 4:3)
 
-| Soubor | Co nafotit |
-|---|---|
-| `turbo.jpg` | Rozebrané turbo na ponku, detail kompresorového kola |
-| `automat.jpg` | Strojní plnička připojená k automatu, hadice a průhledné trubice |
-| `klima.jpg` | Plnička klimatizace u otevřené kapoty, displej stanice |
-| `odtah.jpg` | Odtahový vůz s naloženým autem za tmy, modré světlo |
+Turbo, automat a klima jsou zatím **dočasně z Pexels** (licence Pexels: komerční
+použití zdarma, bez uvedení autora, úpravy povolené — pexels.com/license, ověřeno
+4. 10. 2026). Až budou vlastní fotky, nahraď je; sloupec „Co nafotit" říká co.
+
+| Soubor | Teď na něm | Co nafotit |
+|---|---|---|
+| `turbo.jpg` | Pexels 7565160 — opotřebované turbo na ponku v dílně | Rozebrané turbo na ponku, detail kompresorového kola |
+| `automat.jpg` | Pexels 28926633 — volič automatu P R N D | Strojní plnička připojená k automatu, hadice a průhledné trubice |
+| `klima.jpg` | Pexels 28490734 — displej klimatizace „23.0 A/C" | Plnička klimatizace u otevřené kapoty, displej stanice |
+| `odtah.jpg` | Vlastní: modrá odtahovka Iveco s logem (2. 10. 2026) | — |
+
+Zdroj Pexels najdeš jako `https://www.pexels.com/photo/<číslo>/`. Ořez 4:3 na
+střed, 1200 × 900, bez metadat.
 
 Ke každé kartě může být i video se stejným názvem: `turbo.mp4`, `automat.mp4`,
 `klima.mp4`, `odtah.mp4`. Na tabletu a notebooku se přes fotku prolne a běží ve
