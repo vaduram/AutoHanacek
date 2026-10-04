@@ -84,11 +84,37 @@ const { mapa, majitel, hodiny } = kdeJsme;
 
 	const DNY_V = ['neděli', 'pondělí', 'úterý', 'středu', 'čtvrtek', 'pátek', 'sobotu'];
 
+	/** Svátky podle zákona 245/2000 Sb. (měsíc-den), k tomu Velký pátek a Velikonoční pondělí. */
+	const SVATKY = ['1-1', '5-1', '5-8', '7-5', '7-6', '9-28', '10-28', '11-17', '12-24', '12-25', '12-26'];
+	const DEN_MS = 86_400_000;
+
+	/** Velikonoční neděle (gregoriánský kalendář, Meeus/Jones/Butcher) jako UTC půlnoc. */
+	function velikonoce(r: number) {
+		const a = r % 19;
+		const b = Math.floor(r / 100);
+		const c = r % 100;
+		const h = (19 * a + b - Math.floor(b / 4) - Math.floor((b - Math.floor((b + 8) / 25) + 1) / 3) + 15) % 30;
+		const l = (32 + 2 * (b % 4) + 2 * Math.floor(c / 4) - h - (c % 4)) % 7;
+		const m = Math.floor((a + 11 * h + 22 * l) / 451);
+		const n = h + l - 7 * m + 114;
+		return Date.UTC(r, Math.floor(n / 31) - 1, (n % 31) + 1);
+	}
+
+	function jeSvatek(utc: number) {
+		const d = new Date(utc);
+		if (SVATKY.includes(`${d.getUTCMonth() + 1}-${d.getUTCDate()}`)) return true;
+		const ne = velikonoce(d.getUTCFullYear());
+		return utc === ne - 2 * DEN_MS || utc === ne + DEN_MS;
+	}
+
 	const stav = document.querySelector<HTMLElement>('[data-stav]');
 	if (stav) {
 		const rozpis: Den[] = JSON.parse(stav.dataset.stav!);
 		const casti = new Intl.DateTimeFormat('en-GB', {
 			timeZone: 'Europe/Prague',
+			year: 'numeric',
+			month: 'numeric',
+			day: 'numeric',
 			weekday: 'short',
 			hour: 'numeric',
 			minute: 'numeric',
@@ -97,12 +123,16 @@ const { mapa, majitel, hodiny } = kdeJsme;
 		const cast = (typ: string) => casti.find((p) => p.type === typ)?.value ?? '';
 		const den = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(cast('weekday'));
 		const hodina = Number(cast('hour')) + Number(cast('minute')) / 60;
+		const dnesUtc = Date.UTC(Number(cast('year')), Number(cast('month')) - 1, Number(cast('day')));
+		const svatekZa = (dni: number) => jeSvatek(dnesUtc + dni * DEN_MS);
 		const pro = (d: number) => rozpis.find((r) => r.dny.includes(d));
 		const dnes = pro(den);
 
 		let text = '';
 		let otevreno = false;
-		if (dnes?.otevira !== undefined && dnes.zavira !== undefined && hodina >= dnes.otevira && hodina < dnes.zavira) {
+		if (svatekZa(0)) {
+			text = 'Dnes svátek · raději zavolejte';
+		} else if (dnes?.otevira !== undefined && dnes.zavira !== undefined && hodina >= dnes.otevira && hodina < dnes.zavira) {
 			otevreno = true;
 			text = `Teď otevřeno · do ${dnes.zavira}:00`;
 		} else if (dnes?.otevira !== undefined && hodina < dnes.otevira) {
@@ -114,7 +144,10 @@ const { mapa, majitel, hodiny } = kdeJsme;
 				const d = (den + i) % 7;
 				const p = pro(d);
 				if (p?.otevira === undefined) continue;
-				text = `Zavřeno · otevíráme ${i === 1 ? 'zítra' : `v ${DNY_V[d]}`} v ${p.otevira}:00`;
+				const kdy = i === 1 ? 'zítra' : `v ${DNY_V[d]}`;
+				text = svatekZa(i)
+					? `Zavřeno · ${kdy} svátek, raději zavolejte`
+					: `Zavřeno · otevíráme ${kdy} v ${p.otevira}:00`;
 				break;
 			}
 		}
@@ -403,6 +436,7 @@ const { mapa, majitel, hodiny } = kdeJsme;
 	.kde__dny dd {
 		margin: 0;
 		font-family: var(--font-mono);
+		text-align: right;
 	}
 
 	.kde__odtah {

@@ -106,9 +106,10 @@ Bez toho by se na `github.io` nenačetlo CSS ani obrázky — odkazovaly by na k
 ## Co zbývá před spuštěním
 
 1. **Fotky a video** — bez nich hero stojí jen na gradientu. Největší položka.
-2. **Právní texty** — zásady zpracování osobních údajů a cookies. V patičce je
-   zatím vidět placeholder `[odkazy: GDPR, cookies]`. Staré obchodní podmínky se
-   nedají použít, odkazují na zákon 101/2000 Sb., což je předGDPR.
+2. **Právní texty** — návrh zásad ochrany osobních údajů je na stránce
+   `/ochrana-osobnich-udaju/` (text v `ochranaUdaju` v `site.ts`). Doplnit `[?]`
+   a nechat zkontrolovat. Staré obchodní podmínky se nedají použít, odkazují na
+   zákon 101/2000 Sb., což je předGDPR.
 3. **Mapa** v sekci kontakt — v návrhu není, ale zákazník ji hledá.
    Doplnit i `firma.geo` v `site.ts`, JSON-LD ji pak použije.
 4. **Ověřit IČO OSVČ** — web uvádí 742 14 021, obchodní rejstřík 742 10 021.

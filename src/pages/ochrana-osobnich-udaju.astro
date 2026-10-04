@@ -1,0 +1,131 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Paticka from '../components/Paticka.astro';
+import logo from '../assets/logo.png';
+import { verejne } from '../lib/cesta';
+import { firma, ochranaUdaju } from '../data/site';
+
+const domu = verejne('');
+---
+
+<Base titulek={`${ochranaUdaju.titulek} — ${firma.znacka}`} popis={ochranaUdaju.perex}>
+	<header class="lista">
+		<div class="wrap lista__obsah">
+			<a href={domu} class="lista__logo" aria-label={`${firma.znacka} — domů`}>
+				<Image src={logo} alt={firma.znacka} height={88} densities={[1, 2]} loading="eager" />
+			</a>
+			<a href={domu} class="lista__zpet">← Zpět na web</a>
+		</div>
+	</header>
+
+	<main class="section">
+		<article class="wrap ou">
+			<div class="eyebrow">
+				<i></i><span>Upraveno {ochranaUdaju.upraveno}</span>
+			</div>
+			<h1 class="h2 ou__h1">{ochranaUdaju.titulek}</h1>
+			<p class="ou__perex">{ochranaUdaju.perex}</p>
+
+			{
+				ochranaUdaju.sekce.map((s) => (
+					<section class="ou__sekce">
+						<h2 class="ou__nadpis">{s.nadpis}</h2>
+						{s.odstavce?.map((o) => <p set:html={o} />)}
+						{s.body && <ul>{s.body.map((b) => <li set:html={b} />)}</ul>}
+					</section>
+				))
+			}
+		</article>
+	</main>
+
+	<Paticka />
+</Base>
+
+<style>
+	.lista {
+		background: var(--srf);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.lista__obsah {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding-block: 14px;
+	}
+
+	.lista__logo img {
+		height: 44px;
+		width: auto;
+	}
+
+	.lista__zpet {
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 12px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.lista__zpet:hover {
+		color: var(--acc);
+	}
+
+	.ou {
+		max-width: calc(72ch + 2 * var(--pad));
+	}
+
+	.ou__h1 {
+		margin-top: 18px;
+	}
+
+	.ou__perex {
+		margin-top: 20px;
+		font-size: clamp(16px, 1.4vw, 18px);
+		line-height: 1.65;
+		color: var(--ink);
+	}
+
+	.ou__sekce {
+		margin-top: 40px;
+		padding-top: 28px;
+		border-top: 1px solid var(--line);
+	}
+
+	.ou__nadpis {
+		margin: 0 0 14px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: clamp(22px, 2.4vw, 28px);
+		line-height: 1.1;
+		text-transform: uppercase;
+	}
+
+	.ou__sekce p,
+	.ou__sekce li {
+		font-size: 16px;
+		line-height: 1.7;
+		color: var(--mut);
+	}
+
+	.ou__sekce p + p {
+		margin-top: 12px;
+	}
+
+	.ou__sekce ul {
+		margin: 0;
+		padding-left: 20px;
+	}
+
+	.ou__sekce li + li {
+		margin-top: 8px;
+	}
+
+	.ou__sekce :global(a) {
+		color: var(--acc);
+	}
+</style>

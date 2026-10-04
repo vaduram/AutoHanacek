@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '../assets/logo.png';
+import { verejne } from '../lib/cesta';
 import { firma, oteviraciDoba } from '../data/site';
 ---
 
@@ -36,8 +37,7 @@ import { firma, oteviraciDoba } from '../data/site';
 			<p class="paticka__text">
 				IČO {firma.ico}<br />
 				DIČ {firma.dic}<br />
-				{/* Právní texty zatím neexistují — doplnit před spuštěním, viz README. */}
-				<span class="paticka__todo">[odkazy: GDPR, cookies]</span>
+				<a href={verejne('ochrana-osobnich-udaju/')} class="paticka__odkaz">Ochrana osobních údajů a cookies</a>
 			</p>
 		</div>
 	</div>
@@ -100,11 +100,6 @@ import { firma, oteviraciDoba } from '../data/site';
 	.paticka__nonstop {
 		color: var(--acc);
 		font-weight: 600;
-	}
-
-	.paticka__todo {
-		color: var(--grey);
-		font-style: italic;
 	}
 
 	.paticka__spodek {

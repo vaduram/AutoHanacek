@@ -15,6 +15,8 @@ export const firma = {
 	email: 'info@hanacekauto.cz',
 	ico: '035 93 657',
 	dic: 'CZ03593657',
+	// Sídlo podle výpisu z obchodního rejstříku (kurzy.cz, data z justice.cz k 29. 1. 2025).
+	sidlo: 'Nedakoničky 283, 696 85 Moravský Písek',
 	zalozeno: 2006,
 	vlastniDilnaOd: 2015,
 	spadovaOblast: ['Moravský Písek', 'Bzenec', 'Veselí nad Moravou'],
@@ -24,7 +26,9 @@ export const firma = {
 
 /**
  * `dny` jsou čísla dnů podle Date.getDay() (0 = neděle), `otevira` a `zavira` celé
- * hodiny pražského času. Z nich web počítá stav „Teď otevřeno" — svátky nezná.
+ * hodiny pražského času. Z nich web počítá stav „Teď otevřeno". O svátcích
+ * (seznam v KdeJsme.astro) místo stavu radí zavolat — majitel neví jistě,
+ * jestli mají zavřeno o všech.
  */
 const vsedni = { otevira: 7, zavira: 16 };
 
@@ -32,6 +36,7 @@ export const oteviraciDoba = [
 	{ den: 'Pondělí–pátek', cas: `${vsedni.otevira}:00–${vsedni.zavira}:00`, dny: [1, 2, 3, 4, 5], ...vsedni },
 	{ den: 'Sobota', cas: 'dle objednání', dny: [6] },
 	{ den: 'Neděle', cas: 'zavřeno', dny: [0] },
+	{ den: 'Svátky', cas: 'většinou zavřeno, volejte předem', dny: [] as number[] },
 ];
 
 /** Externí rezervační kalendář SmartServis (PneuB2B). */
@@ -100,26 +105,19 @@ export const hero = {
 	perexMobil: 'Pneuservis, brzdy, klimatizace, turba, automaty, STK i odtah nonstop.',
 	sezonaStitek: 'Právě teď',
 	sezona:
-		'Sezóna přezutí — 4 kola i s vyvážením <strong>od 950 Kč</strong>. ' +
+		'Sezóna přezutí — 4 kola i s vyvážením <strong>od 1 100 Kč</strong>. ' +
 		'Pneuservis si objednáte online vpravo, ostatní práce telefonicky.',
-	sezonaMobil: 'Přezutí 4 kol s vyvážením <strong>od 950 Kč</strong>',
+	sezonaMobil: 'Přezutí 4 kol s vyvážením <strong>od 1 100 Kč</strong>',
 	/**
-	 * Čísla v hero pásu.
+	 * Čísla v hero pásu. Počty aut a zákazníků zadány 4. 10. 2026.
 	 *
-	 * ⚠️ Položky s `[…]` jsou nevyplněné. Doplň skutečné hodnoty, nebo je odsud
-	 * smaž — vymyšlené číslo je u obchodního tvrzení právní problém (nekalé
-	 * obchodní praktiky) a v místě, kde servis znají, stejně neprojde.
-	 *
-	 * Kde čísla vzít: SmartServis → Zákazníci (počet záznamů), účetnictví
-	 * (počet zakázek za rok × roky), nebo skladová evidence uskladněných sad.
-	 * Starý web uváděl „přes 700 zákazníků" — bez roku, takže neověřitelné.
-	 *
-	 * Konkrétní číslo působí věrohodněji než kulaté: „1 240" věří člověk spíš
-	 * než „5 000". A hodnota s rokem („od 2006") je ověřitelná, tedy bezpečná.
+	 * ⚠️ Vymyšlené číslo je u obchodního tvrzení právní problém (nekalé obchodní
+	 * praktiky) a v místě, kde servis znají, stejně neprojde. Položka s `[…]`
+	 * se v pásu zobrazí jako nevyplněná.
 	 */
 	cisla: [
-		{ hodnota: '[?]', dopocitat: null, popis: 'opravených vozů' },
-		{ hodnota: '[?]', dopocitat: null, popis: 'spokojených zákazníků' },
+		{ hodnota: '15 000+', dopocitat: null, popis: 'opravených aut' },
+		{ hodnota: '8 000+', dopocitat: null, popis: 'spokojených zákazníků' },
 		// místo, kam se v pásu vloží `hodnoceni` níže
 		'hodnoceni' as const,
 		{ hodnota: '2006', dopocitat: 2006, popis: 'v provozu od' },
@@ -297,8 +295,8 @@ export const cenik = {
 			cislo: '01',
 			nazev: 'Autoservis',
 			popis: 'Brzdy, podvozek, tlumiče, ložiska, motory, převodovky, výfuky, vstřikovače Common Rail.',
-			cena: 'od 700 Kč/hod',
-			cenaMobil: 'od 700 Kč/h',
+			cena: 'od 850 Kč/hod',
+			cenaMobil: 'od 850 Kč/h',
 			zvyraznit: true,
 		},
 		{
@@ -327,14 +325,22 @@ export const cenik = {
 		},
 		{
 			cislo: '05',
-			nazev: 'Diagnostika a STK',
-			popis: 'Systémy DELPHI, WOW, KTS. Příprava na technickou i emise.',
-			cena: 'dle rozsahu',
-			cenaMobil: 'dle rozsahu',
-			zvyraznit: false,
+			nazev: 'Diagnostika',
+			popis: 'Počítačová diagnostika systémy DELPHI, WOW, KTS.',
+			cena: 'od 400 Kč',
+			cenaMobil: 'od 400 Kč',
+			zvyraznit: true,
 		},
 		{
 			cislo: '06',
+			nazev: 'STK',
+			popis: 'Příprava vozu na technickou i emise a zprostředkování STK.',
+			cena: 'cena individuální',
+			cenaMobil: 'individuálně',
+			zvyraznit: false,
+		},
+		{
+			cislo: '07',
 			nazev: 'Odtah NONSTOP',
 			popis: 'Osobní i dodávková vozidla do 3,5 t. Voláte kdykoliv.',
 			cena: 'od 25 Kč/km',
@@ -342,7 +348,7 @@ export const cenik = {
 			zvyraznit: true,
 		},
 		{
-			cislo: '07',
+			cislo: '08',
 			nazev: 'Tažná zař. · Autoskla',
 			popis: 'Autohak, Jaeger, Thule, Westfalia; 7 i 13 pólů, homologace EU. Skla často z povinného ručení.',
 			cena: 'naceníme telefonicky',
@@ -404,8 +410,9 @@ export const kdeJsme = {
 	majitel: {
 		stitek: 'Majitel servisu',
 		jmeno: 'Vlastimil Hanáček',
-		/** Pár vět doplní majitel. Dokud je null, karta ukáže jen fotku a jméno. */
-		medailon: null as string | null,
+		/** Slovy majitele. Když je null, karta ukáže jen fotku a jméno. */
+		medailon: ('„Mám rád dobře odvedenou práci. Největší radost mám, když se ke mně zákazníci ' +
+			'vracejí — protože byli spokojení, ne protože se závada vrátila.“') as string | null,
 		foto: { soubor: 'majitel.jpg', popis: 'Vlastimil Hanáček, majitel servisu, v dílně' },
 	},
 };
@@ -417,9 +424,91 @@ export const navigace = [
 	{ text: 'Kontakt', href: '#kde-jsme' },
 ];
 
+/**
+ * Stránka /ochrana-osobnich-udaju/. Řetězce smí obsahovat HTML (odkazy).
+ *
+ * ⚠️ Návrh, ne právní posudek — před spuštěním ho má projít majitel, ideálně
+ * i právník. `[?]` jsou údaje, které z webu zjistit nejde.
+ *
+ * Popisuje web tak, jak je: bez cookies a analytiky, kalendář až po kliknutí,
+ * hosting GitHub Pages. Přibude-li měření návštěvnosti, vložená mapa nebo
+ * jiný hosting, text přestane platit a musí se upravit.
+ */
+export const ochranaUdaju = {
+	titulek: 'Ochrana osobních údajů',
+	upraveno: '4. 10. 2026',
+	perex:
+		'Jak zacházíme s údaji, které nám svěříte, když se objednáte, zavoláte nebo u nás necháte auto. ' +
+		'Zkráceně: používáme je jen k tomu, co je potřeba k zakázce, a nikomu je neprodáváme.',
+	sekce: [
+		{
+			nadpis: 'Kdo údaje zpracovává',
+			odstavce: [
+				`Správcem je ${firma.nazev}, IČO ${firma.ico}, se sídlem ${firma.sidlo}. ` +
+					`Provozovna: ${firma.ulice}, ${firma.psc} ${firma.mesto}.`,
+				`S čímkoli ohledně vašich údajů se obraťte na <a href="mailto:${firma.email}">${firma.email}</a> ` +
+					`nebo telefon <a href="${firma.telefonHref}">${firma.telefonZobrazit}</a>.`,
+			],
+		},
+		{
+			nadpis: 'Tento web',
+			body: [
+				'Nepoužívá cookies ani nástroje na měření návštěvnosti nebo reklamu.',
+				'Písma i mapa jsou uložené přímo na webu, takže se při prohlížení nepřipojujete k žádné další službě.',
+				'Prohlížeč si pamatuje jen to, jestli chcete světlý, nebo tmavý vzhled. Ta volba zůstává ve vašem ' +
+					'zařízení a k nám se nedostane.',
+				'Web běží na službě GitHub Pages společnosti GitHub, Inc. Ta podle své dokumentace z bezpečnostních ' +
+					'důvodů zaznamenává IP adresy návštěvníků, viz ' +
+					'<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" ' +
+					'target="_blank" rel="noopener">zásady GitHubu</a>.',
+				'Odkazy na Mapy.com, Google Maps a Waze otevírají cizí weby. Tam už platí jejich pravidla.',
+			],
+		},
+		{
+			nadpis: 'Online rezervace pneuservisu',
+			odstavce: [
+				'Rezervační kalendář běží na systému SmartServis (PneuB2B), provozovatel [?] (název a IČO podle ' +
+					'smlouvy). Kalendář se načte, až když ho otevřete.',
+				'Údaje, které do něj vyplníte, slouží jen k domluvě termínu a provozovatel systému je pro nás ' +
+					'zpracovává jako zpracovatel. Kalendář má vlastní lištu s nastavením cookies, ty spravuje jeho provozovatel.',
+			],
+		},
+		{
+			nadpis: 'Když nám zavoláte nebo přivezete auto',
+			odstavce: [
+				'Zpracováváme jméno, telefon a e-mail, údaje o vozidle (SPZ, VIN, stav tachometru), co na voze ' +
+					'děláme, a u firem fakturační údaje. U odtahu také místo, odkud auto vezeme, u uskladnění, ' +
+					'komu sada pneu patří.',
+				'Potřebujeme je k domluvě a provedení zakázky (plnění smlouvy, čl. 6 odst. 1 písm. b) GDPR). ' +
+					'Doklady pak musíme uchovat kvůli účetnictví a daním (právní povinnost, čl. 6 odst. 1 písm. c) GDPR).',
+				'Údaje držíme po dobu zakázky nebo uskladnění, doklady tak dlouho, jak určují účetní a daňové ' +
+					'předpisy. Historii servisu vozu uchováváme [?].',
+			],
+		},
+		{
+			nadpis: 'Komu je předáváme',
+			odstavce: [
+				'Jen tomu, kdo nám pomáhá zakázku zajistit (provozovateli rezervačního systému, [?] účetní), ' +
+					'a úřadům, pokud to vyžaduje zákon. Neprodáváme je a nepoužíváme k reklamě.',
+			],
+		},
+		{
+			nadpis: 'Vaše práva',
+			odstavce: [
+				'Můžete po nás chtít, abychom vám řekli, jaké údaje o vás máme, opravili je, smazali, omezili ' +
+					'jejich zpracování nebo vám je předali. Proti zpracování můžete podat námitku. Stačí napsat ' +
+					'nebo zavolat.',
+				'Pokud si myslíte, že s údaji nakládáme špatně, můžete si stěžovat u ' +
+					'<a href="https://uoou.gov.cz" target="_blank" rel="noopener">Úřadu pro ochranu osobních údajů</a>, ' +
+					'Pplk. Sochora 27, 170 00 Praha 7.',
+			],
+		},
+	],
+};
+
 export const seo = {
 	titulek: 'Hanáček Auto — autoservis a pneuservis, Moravský Písek',
 	popis:
-		'Autoservis a pneuservis v Moravském Písku. Přezutí od 950 Kč s vyvážením v ceně, ' +
+		'Autoservis a pneuservis v Moravském Písku. Přezutí od 1 100 Kč s vyvážením v ceně, ' +
 		'klimatizace, turbodmychadla, olej v automatu, odtah nonstop. Objednejte se online.',
 };
