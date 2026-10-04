@@ -89,19 +89,26 @@ Po prvním pushi ještě v repozitáři: **Settings → Pages → Source → Git
 
 ### Vlastní doména vs. github.io
 
-Teď je to nastavené na **vlastní doménu** (`site: 'https://www.hanacekauto.cz'`
-v `astro.config.mjs`, bez `base`). Až bude DNS hotové, přidej soubor
-`public/CNAME` s jediným řádkem `www.hanacekauto.cz`.
+Web běží na **www.hanacekauto.cz**. Doména je zadaná v GitHubu
+(**Settings → Pages → Custom domain**); soubor `public/CNAME` se při nasazení
+přes GitHub Actions nepoužívá, proto tu není.
 
-Jestli si to chceš prohlédnout na `github.io` dřív, než se sáhne na doménu,
-musí se v `astro.config.mjs` dočasně přepsat:
+DNS spravuje Thinline (Český hosting), u kterého je doména registrovaná:
 
-```js
-site: 'https://<uzivatel>.github.io',
-base: '/<nazev-repozitare>',
-```
+| Záznam | Hodnota |
+|---|---|
+| `www` CNAME | `vaduram.github.io` |
+| `@` A | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` |
+| `@` AAAA | `2606:50c0:8000::153` … `2606:50c0:8003::153` |
+| `@` MX | `mx1d10.thinline.cz`, `mx1b20.thinline.cz` — **neměnit**, jinak přestane chodit `info@` |
 
-Bez toho by se na `github.io` nenačetlo CSS ani obrázky — odkazovaly by na kořen.
+Holá doména `hanacekauto.cz` přesměruje na `www` sama (GitHub).
+
+Staré adresy z eshop-rychle.cz (`/AUTOSERVIS-a3_7.htm`, …) přesměrovává na nový
+web `STARE_ADRESY` v `astro.config.mjs`; ostatní skončí na `src/pages/404.astro`.
+
+Náhled na `github.io` (nastavením `GITHUB_PAGES=true` v `deploy.yml`, viz
+`astro.config.mjs`) funguje, jen dokud v repozitáři není vlastní doména.
 
 ## Co zbývá před spuštěním
 
@@ -114,11 +121,8 @@ Bez toho by se na `github.io` nenačetlo CSS ani obrázky — odkazovaly by na k
    Doplnit i `firma.geo` v `site.ts`, JSON-LD ji pak použije.
 4. **Ověřit IČO OSVČ** — web uvádí 742 14 021, obchodní rejstřík 742 10 021.
    Na webu je teď jen IČO s.r.o., které sedí.
-5. **301 přesměrování** ze starých URL (`/AUTOSERVIS-a3_7.htm`, `/KONTAKTY-a2_0.htm`, …),
-   jinak se ztratí pozice ve vyhledávání. Na Cloudflare Pages přes `_redirects`,
-   GitHub Pages to neumí vůbec.
-6. **DNS** — netřeba převádět doménu, stačí přehodit nameservery.
-   Pozor na MX záznamy, jinak přestane chodit `info@hanacekauto.cz`.
+5. **Search Console** — po přechodu na doménu zkontrolovat, že se nový web indexuje
+   a staré adresy přecházejí na nové (přesměrování viz výše).
 
 ## Poznámky k implementaci
 

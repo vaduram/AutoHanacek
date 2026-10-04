@@ -506,6 +506,16 @@ export const ochranaUdaju = {
 	],
 };
 
+/** Stránka 404 — sem dojde i odkaz na starý web, který nemá přesměrování (astro.config.mjs). */
+export const nenalezeno = {
+	stitek: 'Chyba 404',
+	nadpis: 'Tahle stránka tu není',
+	text:
+		'Možná jste přišli odkazem ze starého webu. Všechno důležité — ceník, objednání ' +
+		'pneuservisu i kontakt — teď najdete na jedné stránce.',
+	domu: 'Na hlavní stránku',
+};
+
 export const seo = {
 	titulek: 'Hanáček Auto — autoservis a pneuservis, Moravský Písek',
 	popis:

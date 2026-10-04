@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import { verejne } from '../lib/cesta';
+import { firma } from '../data/site';
+
+const domu = verejne('');
+---
+
+<header class="lista">
+	<div class="wrap lista__obsah">
+		<a href={domu} class="lista__logo" aria-label={`${firma.znacka} — domů`}>
+			<Image src={logo} alt={firma.znacka} height={88} densities={[1, 2]} loading="eager" />
+		</a>
+		<a href={domu} class="lista__zpet">← Zpět na web</a>
+	</div>
+</header>
+
+<style>
+	.lista {
+		background: var(--srf);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.lista__obsah {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding-block: 14px;
+	}
+
+	.lista__logo img {
+		height: 44px;
+		width: auto;
+	}
+
+	.lista__zpet {
+		font-family: var(--font-mono);
+		font-weight: 500;
+		font-size: 12px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.lista__zpet:hover {
+		color: var(--acc);
+	}
+</style>

@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import Lista from '../components/Lista.astro';
+import Paticka from '../components/Paticka.astro';
+import { verejne } from '../lib/cesta';
+import { firma, nenalezeno } from '../data/site';
+---
+
+<Base titulek={`${nenalezeno.nadpis} — ${firma.znacka}`} popis={nenalezeno.text}>
+	<Lista />
+
+	<main class="section">
+		<div class="wrap nn">
+			<div class="eyebrow">
+				<i></i><span>{nenalezeno.stitek}</span>
+			</div>
+			<h1 class="h2 nn__h1">{nenalezeno.nadpis}</h1>
+			<p class="nn__text">{nenalezeno.text}</p>
+			<div class="nn__tlacitka">
+				<a href={verejne('')} class="btn btn--acc">
+					<span class="sweep" aria-hidden="true"></span>
+					<span>{nenalezeno.domu}</span>
+				</a>
+				<a href={firma.telefonHref} class="btn btn--ghost">Zavolat {firma.telefonZobrazit}</a>
+			</div>
+		</div>
+	</main>
+
+	<Paticka />
+</Base>
+
+<style>
+	.nn {
+		max-width: calc(60ch + 2 * var(--pad));
+		padding-block: clamp(24px, 6vw, 72px);
+	}
+
+	.nn__h1 {
+		margin-top: 18px;
+	}
+
+	.nn__text {
+		margin-top: 20px;
+		font-size: clamp(16px, 1.4vw, 18px);
+		line-height: 1.65;
+		color: var(--mut);
+	}
+
+	.nn__tlacitka {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 32px;
+	}
+</style>
