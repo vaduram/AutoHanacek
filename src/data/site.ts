@@ -240,7 +240,7 @@ export const specializace = {
 export const galerie = {
 	nadpis: ['Podívejte se', 'k nám do dílny'],
 	perex:
-		'Dvě stání, zvedáky, vlastní pneuservisní i diagnostické vybavení. ' +
+		'Čtyři stání, zvedáky, vlastní pneuservisní i diagnostické vybavení. ' +
 		'Uvidíte, kam auto necháváte.',
 	fotky: [
 		{ soubor: 'hala.jpg', popis: 'hala dílny se zvedáky, vůz na stání', sloupce: 3, radky: 2, mobil: 2 },
